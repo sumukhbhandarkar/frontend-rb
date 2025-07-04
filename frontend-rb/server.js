@@ -24,6 +24,7 @@ const pool = new Pool({
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+app.set("trust proxy", 1);
 app.use(
   session({
     store: new pgSession({
@@ -33,7 +34,11 @@ app.use(
     secret: "referbuddy_secret",
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: false, maxAge: 7 * 24 * 60 * 60 * 1000 }, // 7 days
+    cookie: {
+      secure: process.env.NODE_ENV === "production", // true in production, false in dev
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      sameSite: "lax",
+    },
   })
 );
 
