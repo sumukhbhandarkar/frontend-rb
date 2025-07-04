@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign Up - Refer Buddy</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      body.signup {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Montserrat", Arial, sans-serif;
+        display: flex;
+        background: #f7fafd;
+      }
+      .signup-container {
+        display: flex;
+        width: 100vw;
+        min-height: 100vh;
+      }
+      .signup-left {
+        flex: 1 1 0;
+        background: #f7fafd;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 40px 24px;
+      }
+      .signup-form {
+        width: 100%;
+        max-width: 400px;
+        background: #fff;
+        border-radius: 24px;
+        box-shadow: 0 4px 24px rgba(37, 99, 235, 0.07);
+        padding: 32px 32px 24px 32px;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+      }
+      .signup-info {
+        margin-bottom: 18px;
+        font-size: 0.98rem;
+        color: #2563eb;
+        background: #e9effd;
+        border-radius: 16px;
+        padding: 10px 18px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        border: 1px solid #b6d0fa;
+      }
+      .signup-back {
+        color: #5a6a85;
+        font-size: 0.98rem;
+        margin-bottom: 18px;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+      }
+      .signup-form button,
+      .signup-form .social-btn {
+        width: 100%;
+        border: none;
+        border-radius: 10px;
+        font-size: 1.08rem;
+        font-weight: 600;
+        padding: 12px 0;
+        margin-bottom: 8px;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+      .social-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        background: #2563eb;
+        color: #fff;
+        margin-bottom: 0;
+      }
+      .social-btn.google {
+        background: #f5f5f5;
+        color: #222;
+        border: 1px solid #e0e0e0;
+      }
+      .social-btn img {
+        height: 20px;
+        width: 20px;
+      }
+      .divider {
+        text-align: center;
+        color: #b0b8c9;
+        margin: 10px 0 0 0;
+        font-size: 0.95rem;
+        position: relative;
+      }
+      .divider:before,
+      .divider:after {
+        content: "";
+        display: inline-block;
+        width: 40%;
+        height: 1px;
+        background: #e3eafc;
+        vertical-align: middle;
+        margin: 0 8px;
+      }
+      .signup-form label {
+        font-weight: 600;
+        margin-bottom: 4px;
+        color: #2563eb;
+        font-size: 1rem;
+      }
+      .signup-form input[type="email"] {
+        width: 100%;
+        padding: 12px;
+        border-radius: 8px;
+        border: 1px solid #cfd8e3;
+        font-size: 1rem;
+        margin-bottom: 6px;
+        background: #f7fafd;
+        transition: border 0.2s;
+      }
+      .signup-form input[type="email"]:focus {
+        border: 1.5px solid #2563eb;
+        outline: none;
+      }
+      .signup-form .terms {
+        font-size: 0.92rem;
+        color: #5a6a85;
+        margin-bottom: 8px;
+      }
+      .signup-form .terms a {
+        color: #2563eb;
+        text-decoration: underline;
+      }
+      .signup-form .create-btn {
+        background: #2563eb;
+        color: #fff;
+        border-radius: 10px;
+        font-size: 1.12rem;
+        font-weight: 700;
+        margin-top: 8px;
+        margin-bottom: 0;
+        box-shadow: 0 2px 8px rgba(37, 99, 235, 0.08);
+        transition: background 0.2s;
+      }
+      .signup-form .create-btn:hover {
+        background: #174ea6;
+      }
+      .signup-form .login-link {
+        text-align: center;
+        margin-top: 10px;
+        font-size: 0.98rem;
+        color: #5a6a85;
+      }
+      .signup-form .login-link a {
+        color: #2563eb;
+        text-decoration: underline;
+        margin-left: 4px;
+      }
+      .signup-right {
+        flex: 1 1 0;
+        background: linear-gradient(135deg, #2563eb 0%, #7f53e9 100%);
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 0 60px;
+        min-height: 100vh;
+      }
+      .signup-right h2 {
+        font-size: 2.6rem;
+        font-weight: 800;
+        margin-bottom: 18px;
+        margin-top: 0;
+        line-height: 1.15;
+      }
+      .signup-right p {
+        font-size: 1.18rem;
+        color: #e3eafc;
+        margin-top: 0;
+      }
+      @media (max-width: 900px) {
+        .signup-right {
+          padding: 0 24px;
+        }
+        .signup-right h2 {
+          font-size: 2rem;
+        }
+      }
+      @media (max-width: 700px) {
+        .signup-container {
+          flex-direction: column;
+        }
+        .signup-left,
+        .signup-right {
+          flex: unset;
+          width: 100vw;
+          min-height: unset;
+          padding: 32px 8px;
+        }
+        .signup-right {
+          align-items: center;
+          text-align: center;
+          padding: 32px 8px;
+        }
+      }
+    </style>
+  </head>
+  <body class="signup">
+    <div class="signup-container">
+      <div class="signup-left">
+        <div class="signup-form">
+          <div class="signup-info">
+            <span style="font-size: 1.2em">ℹ️</span>
+            If you want to refer talent to your company,
+            <a href="#" style="color: #2563eb; text-decoration: underline"
+              >sign up here</a
+            >.
+          </div>
+          <a href="index.html" class="signup-back">← Back to Refer Buddy</a>
+          <button class="social-btn" style="background: #2563eb; color: #fff">
+            <img
+              src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-original.svg"
+              alt="LinkedIn"
+            />
+            Sign up with LinkedIn
+          </button>
+          <button class="social-btn google">
+            <img
+              src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg"
+              alt="Google"
+            />
+            Sign up with Google
+          </button>
+          <div class="divider">or</div>
+          <label for="email">Email <span style="color: #e63946">*</span></label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="Enter your email address"
+            required
+          />
+          <div class="terms">
+            By signing up, you agree to our
+            <a href="#">terms and conditions</a> and
+            <a href="#">privacy policy</a>.
+          </div>
+          <button class="create-btn">Create your Refer Buddy account</button>
+          <div class="login-link">
+            Already have an account? <a href="#">Log in</a>
+          </div>
+        </div>
+      </div>
+      <div class="signup-right">
+        <h2>Join Refer Buddy and unlock your next opportunity</h2>
+        <p>
+          Create your account and get referred to your next job by real
+          employees. Your dream role is just a step away!
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
