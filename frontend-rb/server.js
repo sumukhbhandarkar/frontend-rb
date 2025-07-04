@@ -1,70 +1,87 @@
+// Required dependencies: axios, jsonwebtoken, pg
 const express = require("express");
 const path = require("path");
-const session = require("express-session");
-const passport = require("passport");
-const LinkedInStrategy = require("passport-linkedin-oauth2").Strategy;
-
+const axios = require("axios");
+const jwt = require("jsonwebtoken");
+const { Pool } = require("pg");
 require("dotenv").config();
 
-const LINKEDIN_KEY = process.env.LINKEDIN_CLIENT_ID;
-const LINKEDIN_SECRET = process.env.LINKEDIN_CLIENT_SECRET;
-const LINKEDIN_CALLBACK_URL = process.env.LINKEDIN_CALLBACK_URL;
+const CLIENT_ID = process.env.LINKEDIN_CLIENT_ID;
+const CLIENT_SECRET = process.env.LINKEDIN_CLIENT_SECRET;
+const REDIRECT_URI = process.env.LINKEDIN_CALLBACK_URL;
+const SCOPE = "openid profile email";
 
-passport.use(
-  new LinkedInStrategy(
-    {
-      clientID: LINKEDIN_KEY,
-      clientSecret: LINKEDIN_SECRET,
-      callbackURL: LINKEDIN_CALLBACK_URL,
-      scope: ["openid", "profile", "email"],
-    },
-    function (accessToken, refreshToken, profile, done) {
-      // Here, you would look up or create the user in your DB
-      return done(null, profile);
-    }
-  )
-);
-
-passport.serializeUser((user, done) => done(null, user));
-passport.deserializeUser((obj, done) => done(null, obj));
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl:
+    process.env.NODE_ENV === "production"
+      ? { rejectUnauthorized: false }
+      : false,
+});
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(
-  session({
-    secret: "referbuddy_secret",
-    resave: true,
-    saveUninitialized: true,
-  })
-);
-app.use(passport.initialize());
-app.use(passport.session());
-
 app.use(express.static(path.join(__dirname, "public")));
 
-app.get("/auth/linkedin", passport.authenticate("linkedin"));
+app.get("/auth/linkedin", (req, res) => {
+  const authUrl = `https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(
+    REDIRECT_URI
+  )}&scope=${encodeURIComponent(SCOPE)}`;
+  res.redirect(authUrl);
+});
 
-app.get(
-  "/auth/linkedin/callback",
-  passport.authenticate("linkedin", { failureRedirect: "/signup.html" }),
-  function (req, res) {
-    // Successful authentication, redirect to dashboard
-    res.redirect("/dashboard.html");
+app.get("/auth/linkedin/callback", async (req, res) => {
+  const code = req.query.code;
+  if (!code) {
+    return res.status(400).send("Missing code");
   }
-);
-
-app.get("/profile", (req, res) => {
-  if (!req.isAuthenticated()) {
-    return res.redirect("/signup.html");
-  }
-  res.send(
-    `<h1>LinkedIn Profile</h1><pre>${JSON.stringify(
-      req.user,
+  try {
+    // Exchange code for tokens
+    const tokenResponse = await axios.post(
+      "https://www.linkedin.com/oauth/v2/accessToken",
       null,
-      2
-    )}</pre><a href="/">Home</a>`
-  );
+      {
+        params: {
+          grant_type: "authorization_code",
+          code,
+          redirect_uri: REDIRECT_URI,
+          client_id: CLIENT_ID,
+          client_secret: CLIENT_SECRET,
+        },
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      }
+    );
+    const { id_token } = tokenResponse.data;
+    if (!id_token) {
+      return res.status(500).send("No id_token returned by LinkedIn");
+    }
+    // Decode the id_token to get user info
+    const decoded = jwt.decode(id_token);
+    // Store user in Postgres
+    await pool.query(
+      `INSERT INTO users (linkedin_id, name, email, picture)
+       VALUES ($1, $2, $3, $4)
+       ON CONFLICT (linkedin_id) DO UPDATE
+         SET name = EXCLUDED.name, email = EXCLUDED.email, picture = EXCLUDED.picture`,
+      [decoded.sub, decoded.name, decoded.email, decoded.picture]
+    );
+    // Redirect to dashboard
+    res.redirect("/dashboard.html");
+  } catch (err) {
+    console.error(
+      "LinkedIn OAuth error:",
+      err.response ? err.response.data : err
+    );
+    res
+      .status(500)
+      .send(
+        "OAuth Error: " +
+          (err.response ? JSON.stringify(err.response.data) : err.message)
+      );
+  }
 });
 
 app.get("*", (req, res) => {
