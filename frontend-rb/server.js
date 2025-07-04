@@ -1,9 +1,11 @@
-// Required dependencies: axios, jsonwebtoken, pg
+// Required dependencies: axios, jsonwebtoken, pg, express-session, connect-pg-simple
 const express = require("express");
 const path = require("path");
 const axios = require("axios");
 const jwt = require("jsonwebtoken");
 const { Pool } = require("pg");
+const session = require("express-session");
+const pgSession = require("connect-pg-simple")(session);
 require("dotenv").config();
 
 const CLIENT_ID = process.env.LINKEDIN_CLIENT_ID;
@@ -22,7 +24,24 @@ const pool = new Pool({
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(express.static(path.join(__dirname, "public")));
+app.use(
+  session({
+    store: new pgSession({
+      pool: pool,
+      tableName: "session",
+    }),
+    secret: "referbuddy_secret",
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false, maxAge: 7 * 24 * 60 * 60 * 1000 }, // 7 days
+  })
+);
+
+// Serve all static files except dashboard.html
+app.use((req, res, next) => {
+  if (req.path === "/dashboard.html") return next();
+  express.static(path.join(__dirname, "public"))(req, res, next);
+});
 
 app.get("/auth/linkedin", (req, res) => {
   const authUrl = `https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(
@@ -68,6 +87,13 @@ app.get("/auth/linkedin/callback", async (req, res) => {
          SET name = EXCLUDED.name, email = EXCLUDED.email, picture = EXCLUDED.picture`,
       [decoded.sub, decoded.name, decoded.email, decoded.picture]
     );
+    // Set session
+    req.session.user = {
+      id: decoded.sub,
+      name: decoded.name,
+      email: decoded.email,
+      picture: decoded.picture,
+    };
     // Redirect to dashboard
     res.redirect("/dashboard.html");
   } catch (err) {
@@ -84,6 +110,30 @@ app.get("/auth/linkedin/callback", async (req, res) => {
   }
 });
 
+// Protect dashboard.html
+app.get("/dashboard.html", (req, res) => {
+  if (!req.session.user) {
+    return res.redirect("/signup.html");
+  }
+  res.sendFile(path.join(__dirname, "public", "dashboard.html"));
+});
+
+// Logout route
+app.get("/logout", (req, res) => {
+  req.session.destroy(() => {
+    res.redirect("/");
+  });
+});
+
+// Redirect logged-in users to dashboard on / or /index.html
+app.get(["/", "/index.html"], (req, res) => {
+  if (req.session.user) {
+    return res.redirect("/dashboard.html");
+  }
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
+
+// Fallback for all other routes
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
