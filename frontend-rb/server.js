@@ -8,9 +8,7 @@ require("dotenv").config();
 
 const LINKEDIN_KEY = process.env.LINKEDIN_CLIENT_ID;
 const LINKEDIN_SECRET = process.env.LINKEDIN_CLIENT_SECRET;
-const LINKEDIN_CALLBACK_URL =
-  process.env.LINKEDIN_CALLBACK_URL ||
-  "http://localhost:3000/auth/linkedin/callback";
+const LINKEDIN_CALLBACK_URL = process.env.LINKEDIN_CALLBACK_URL;
 
 passport.use(
   new LinkedInStrategy(
@@ -18,7 +16,7 @@ passport.use(
       clientID: LINKEDIN_KEY,
       clientSecret: LINKEDIN_SECRET,
       callbackURL: LINKEDIN_CALLBACK_URL,
-      scope: ["profile", "openid", "email"],
+      scope: ["openid", "profile", "email"],
     },
     function (accessToken, refreshToken, profile, done) {
       // Here, you would look up or create the user in your DB
@@ -75,4 +73,10 @@ app.get("*", (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
+});
+
+// Global error handler for better debugging
+app.use((err, req, res, next) => {
+  console.error("Global error:", err);
+  res.status(500).send("Internal Server Error: " + err.message);
 });

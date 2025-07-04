@@ -89,6 +89,33 @@
           gap: 18px;
         }
       }
+      .plan-header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 2px;
+      }
+      .plan-label {
+        font-size: 1.1rem;
+        font-weight: 500;
+        color: #222;
+        letter-spacing: 0.5px;
+        margin-bottom: 2px;
+      }
+      .plan-price {
+        font-size: 2rem;
+        font-weight: 800;
+        color: #222;
+        margin-right: 2px;
+      }
+      .plan-period {
+        font-size: 0.9rem;
+        font-weight: 400;
+        color: #5a6a85;
+        margin-left: 2px;
+        vertical-align: middle;
+      }
     </style>
   </head>
   <body>
@@ -102,5 +129,285 @@
         <span class="account">Account &#9662;</span>
       </nav>
     </header>
+    <main>
+      <section class="pricing-section">
+        <div class="pricing-header">
+          <div class="plan-comparison">Plan comparison</div>
+          <h1>Find the <span class="highlight">right plan</span> for you</h1>
+          <p>
+            See what's included in each of our plans<br />to find the right fit
+            for you.
+          </p>
+        </div>
+        <div class="pricing-table-wrapper">
+          <table class="pricing-table">
+            <thead>
+              <tr>
+                <th class="feature-col"></th>
+                <th class="plan-col free">
+                  <div class="plan-header">
+                    <span class="plan-label">Free</span>
+                    <span class="plan-price">₹0</span
+                    ><span class="plan-period">/mo</span>
+                  </div>
+                </th>
+                <th class="plan-col premium">
+                  <div class="plan-header">
+                    <span class="plan-label">Premium</span>
+                    <span class="plan-price">₹1299</span
+                    ><span class="plan-period">/mo</span>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="section-label">Features</td>
+                <td class="plan-col"></td>
+                <td class="plan-col"></td>
+              </tr>
+              <tr>
+                <td>Referral requests per week</td>
+                <td class="plan-col">1</td>
+                <td class="plan-col">Unlimited</td>
+              </tr>
+              <tr>
+                <td>AI resume reviews <span class="info">&#9432;</span></td>
+                <td class="plan-col">1</td>
+                <td class="plan-col">100</td>
+              </tr>
+              <tr>
+                <td>Resume Builder <span class="info">&#9432;</span></td>
+                <td class="plan-col">1</td>
+                <td class="plan-col">Unlimited</td>
+              </tr>
+              <tr>
+                <td>Resume Tailoring <span class="info">&#9432;</span></td>
+                <td class="plan-col">1</td>
+                <td class="plan-col">50</td>
+              </tr>
+              <tr>
+                <td>
+                  Detailed referral statuses <span class="info">&#9432;</span>
+                </td>
+                <td class="plan-col cross">&#10006;</td>
+                <td class="plan-col check">&#10003;</td>
+              </tr>
+              <tr>
+                <td>Multiple resumes <span class="info">&#9432;</span></td>
+                <td class="plan-col cross">&#10006;</td>
+                <td class="plan-col check">&#10003;</td>
+              </tr>
+              <tr>
+                <td>Job board access <span class="info">&#9432;</span></td>
+                <td class="plan-col cross">&#10006;</td>
+                <td class="plan-col check">&#10003;</td>
+              </tr>
+              <tr>
+                <td>
+                  Weekly referral marketplace profile boosts
+                  <span class="info">&#9432;</span>
+                </td>
+                <td class="plan-col cross">&#10006;</td>
+                <td class="plan-col check">&#10003;</td>
+              </tr>
+              <tr>
+                <td>
+                  1 Month of interview.study premium
+                  <span class="info">&#9432;</span>
+                </td>
+                <td class="plan-col cross">&#10006;</td>
+                <td class="plan-col check">&#10003;</td>
+              </tr>
+              <tr>
+                <td class="section-label support">Support</td>
+                <td class="plan-col"></td>
+                <td class="plan-col"></td>
+              </tr>
+              <tr>
+                <td>Email Support</td>
+                <td class="plan-col check">&#10003;</td>
+                <td class="plan-col check">&#10003;</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+    <footer class="pricing-footer">
+      <div class="footer-content">
+        <div class="footer-text">
+          <span
+            >Your career is worth investing in.<br /><span
+              class="footer-highlight"
+              >Get unlimited referrals with Premium.</span
+            ></span
+          >
+        </div>
+        <a href="#" class="upgrade-btn">✨ Upgrade to Premium</a>
+      </div>
+    </footer>
+    <style>
+      body {
+        background: #f6f8fa;
+      }
+      .pricing-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 32px;
+      }
+      .pricing-header {
+        text-align: center;
+        margin-bottom: 32px;
+      }
+      .plan-comparison {
+        color: #2563eb;
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: 8px;
+      }
+      .pricing-header h1 {
+        font-size: 2.6rem;
+        font-weight: 800;
+        margin: 0 0 8px 0;
+      }
+      .pricing-header .highlight {
+        color: #2563eb;
+      }
+      .pricing-header p {
+        color: #5a6a85;
+        font-size: 1.1rem;
+        margin: 0;
+      }
+      .pricing-table-wrapper {
+        background: #fff;
+        border-radius: 20px;
+        box-shadow: 0 4px 32px rgba(37, 99, 235, 0.07);
+        padding: 32px 24px;
+        min-width: 600px;
+        max-width: 800px;
+        margin-bottom: 32px;
+      }
+      .pricing-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 1.08rem;
+      }
+      .pricing-table th,
+      .pricing-table td {
+        padding: 14px 16px;
+        vertical-align: middle;
+      }
+      .pricing-table th.plan-col,
+      .pricing-table td.plan-col {
+        text-align: center;
+        min-width: 120px;
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .pricing-table th.plan-col.premium,
+      .pricing-table td.plan-col.premium {
+        padding-left: 48px;
+      }
+      .pricing-table td {
+        text-align: left;
+        font-weight: 400;
+      }
+      .pricing-table .section-label {
+        font-weight: 700;
+        font-size: 1.08rem;
+        color: #111;
+        background: none;
+        border: none;
+        padding-top: 24px;
+        padding-bottom: 8px;
+      }
+      .pricing-table .section-label.support {
+        color: #2563eb;
+      }
+      .pricing-table .check {
+        color: #2563eb;
+        font-size: 1.3rem;
+        text-align: center;
+      }
+      .pricing-table .cross {
+        color: #b0b8c9;
+        font-size: 1.3rem;
+        text-align: center;
+      }
+      .pricing-table .info {
+        color: #b0b8c9;
+        font-size: 1rem;
+        cursor: pointer;
+        margin-left: 4px;
+      }
+      .pricing-footer {
+        width: 100%;
+        background: #fafbfc;
+        padding: 32px 0 24px 0;
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        box-shadow: 0 -2px 16px rgba(37, 99, 235, 0.06);
+      }
+      .footer-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 48px;
+      }
+      .footer-text {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #111;
+      }
+      .footer-highlight {
+        color: #7f53e9;
+        font-weight: 800;
+        margin-left: 2px;
+      }
+      .upgrade-btn {
+        background: linear-gradient(90deg, #7f53e9 0%, #2563eb 100%);
+        color: #fff;
+        font-weight: 700;
+        font-size: 1.1rem;
+        padding: 14px 32px;
+        border-radius: 24px;
+        text-decoration: none;
+        box-shadow: 0 2px 8px rgba(37, 99, 235, 0.1);
+        transition: background 0.2s, box-shadow 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .upgrade-btn:hover {
+        background: linear-gradient(90deg, #2563eb 0%, #7f53e9 100%);
+        box-shadow: 0 4px 16px rgba(37, 99, 235, 0.16);
+      }
+      @media (max-width: 900px) {
+        .pricing-table-wrapper {
+          min-width: unset;
+          max-width: 98vw;
+          padding: 16px 2vw;
+        }
+        .footer-content {
+          flex-direction: column;
+          gap: 18px;
+          padding: 0 12px;
+          text-align: center;
+        }
+      }
+      @media (max-width: 600px) {
+        .pricing-header h1 {
+          font-size: 1.5rem;
+        }
+        .footer-text {
+          font-size: 1.1rem;
+        }
+      }
+    </style>
   </body>
 </html>
