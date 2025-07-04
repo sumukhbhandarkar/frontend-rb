@@ -81,7 +81,7 @@ body {
 }
 .cards-row {
   display: flex;
-  gap: 24px;
+  gap: 32px;
   margin: 40px 0 0 0;
   justify-content: center;
   flex-wrap: wrap;
@@ -89,24 +89,30 @@ body {
 .card {
   background: #fff;
   border-radius: 24px;
-  box-shadow: 0 4px 24px rgba(37, 99, 235, 0.07);
+  box-shadow: 0 8px 32px rgba(37, 99, 235, 0.1);
   padding: 24px 32px;
-  min-width: 260px;
+  min-width: 340px;
+  max-width: 400px;
+  flex: 1 1 340px;
   display: flex;
   align-items: center;
   gap: 16px;
   font-size: 1.1rem;
-  border: 1px solid #e3eafc;
+  border: 2px solid #f0f4f8;
+  margin: 0 0 16px 0;
+  justify-content: flex-start;
+  box-sizing: border-box;
 }
 .company-icon {
   font-size: 2rem;
 }
 .company-logo {
-  height: 28px;
-  width: auto;
-  margin-right: 12px;
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
   vertical-align: middle;
-  filter: drop-shadow(0 1px 2px rgba(37, 99, 235, 0.08));
+  margin-right: 16px;
+  display: inline-block;
 }
 .cta-btn {
   background: #2563eb;
@@ -164,26 +170,68 @@ footer {
 }
 
 .how-it-works {
-  background: #fff;
-  border-radius: 32px;
-  box-shadow: 0 4px 24px rgba(37, 99, 235, 0.07);
+  background: linear-gradient(135deg, #e9effd 0%, #f7fafd 100%);
+  border-radius: 36px;
+  box-shadow: 0 8px 32px rgba(37, 99, 235, 0.1);
   margin: 64px auto 0 auto;
-  max-width: 600px;
-  padding: 48px 36px;
+  max-width: 650px;
+  padding: 56px 44px 44px 44px;
   text-align: left;
-  border: 1px solid #e3eafc;
+  border: 2px solid #d0e2ff;
+  position: relative;
+  overflow: hidden;
+}
+.how-it-works::before {
+  content: "✨";
+  position: absolute;
+  top: 24px;
+  left: 32px;
+  font-size: 2rem;
+  opacity: 0.7;
 }
 .how-it-works h2 {
   color: #2563eb;
   margin-top: 0;
-  font-size: 2rem;
+  font-size: 2.2rem;
   letter-spacing: 0.5px;
+  font-weight: 800;
+  background: linear-gradient(90deg, #2563eb 30%, #7f53e9 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+  margin-bottom: 24px;
 }
 .how-it-works ol {
-  padding-left: 20px;
+  padding-left: 24px;
   color: #222;
+  font-size: 1.15rem;
+  line-height: 2.1;
+  counter-reset: step;
+}
+.how-it-works ol li {
+  margin-bottom: 18px;
+  position: relative;
+  padding-left: 36px;
+  list-style: none;
+}
+.how-it-works ol li:before {
+  counter-increment: step;
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: linear-gradient(135deg, #2563eb 60%, #7f53e9 100%);
+  color: #fff;
+  font-weight: 700;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 1.1rem;
-  line-height: 2;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.1);
 }
 
 @media (max-width: 700px) {
