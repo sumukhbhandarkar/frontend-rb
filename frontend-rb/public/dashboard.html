@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard - Refer Buddy</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        margin: 0;
+        font-family: "Montserrat", Arial, sans-serif;
+        background: #f7fafd;
+      }
+      .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 24px 48px 16px 48px;
+        background: #fff;
+        box-shadow: 0 2px 8px rgba(37, 99, 235, 0.04);
+      }
+      .logo {
+        font-size: 2rem;
+        font-weight: 700;
+        letter-spacing: -1px;
+        color: #444;
+        display: flex;
+        align-items: center;
+      }
+      .logo span {
+        color: #2563eb;
+        margin-left: 2px;
+      }
+      .nav {
+        display: flex;
+        align-items: center;
+        gap: 36px;
+      }
+      .nav-link {
+        text-decoration: none;
+        color: #444;
+        font-weight: 600;
+        font-size: 1.08rem;
+        transition: color 0.2s;
+        position: relative;
+        padding: 0 4px;
+      }
+      .nav-link:hover {
+        color: #2563eb;
+      }
+      .dropdown {
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+      }
+      .premium {
+        color: #444;
+        font-weight: 600;
+        font-size: 1.08rem;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+      .premium .fire {
+        font-size: 1.1em;
+        margin-left: 2px;
+      }
+      .account {
+        color: #444;
+        font-weight: 600;
+        font-size: 1.08rem;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        cursor: pointer;
+      }
+      @media (max-width: 900px) {
+        .header {
+          flex-direction: column;
+          align-items: flex-start;
+          padding: 18px 12px 10px 12px;
+          gap: 12px;
+        }
+        .nav {
+          gap: 18px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="header">
+      <div class="logo">Refer <span>Me</span></div>
+      <nav class="nav">
+        <a href="#" class="nav-link">Request Referrals</a>
+        <a href="#" class="nav-link">Referral Marketplace</a>
+        <span class="nav-link dropdown">Resume Tools &#9662;</span>
+        <span class="premium">Premium <span class="fire">🔥</span></span>
+        <span class="account">Account &#9662;</span>
+      </nav>
+    </header>
+  </body>
+</html>
