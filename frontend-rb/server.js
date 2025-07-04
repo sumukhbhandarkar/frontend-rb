@@ -18,7 +18,7 @@ passport.use(
       clientID: LINKEDIN_KEY,
       clientSecret: LINKEDIN_SECRET,
       callbackURL: LINKEDIN_CALLBACK_URL,
-      scope: ["r_liteprofile"],
+      scope: ["profile", "openid", "email"],
     },
     function (accessToken, refreshToken, profile, done) {
       // Here, you would look up or create the user in your DB
