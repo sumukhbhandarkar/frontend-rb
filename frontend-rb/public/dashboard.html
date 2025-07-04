@@ -126,9 +126,47 @@
         <a href="#" class="nav-link">Referral Marketplace</a>
         <span class="nav-link dropdown">Resume Tools &#9662;</span>
         <span class="premium">Premium <span class="fire">🔥</span></span>
-        <span class="account">Account &#9662;</span>
+        <span class="account" id="accountDropdownBtn">Account &#9662;</span>
       </nav>
     </header>
+    <div
+      id="accountDropdown"
+      style="
+        display: none;
+        position: absolute;
+        right: 48px;
+        top: 70px;
+        background: #fff;
+        box-shadow: 0 2px 8px rgba(37, 99, 235, 0.08);
+        border-radius: 10px;
+        min-width: 160px;
+        z-index: 1000;
+      "
+    >
+      <a
+        href="#"
+        style="
+          display: block;
+          padding: 12px 20px;
+          color: #2563eb;
+          text-decoration: none;
+          font-weight: 600;
+          border-bottom: 1px solid #f0f4f8;
+        "
+        >View Profile</a
+      >
+      <a
+        href="/logout"
+        style="
+          display: block;
+          padding: 12px 20px;
+          color: #e63946;
+          text-decoration: none;
+          font-weight: 600;
+        "
+        >Logout</a
+      >
+    </div>
     <main>
       <section class="pricing-section">
         <div class="pricing-header">
@@ -409,5 +447,18 @@
         }
       }
     </style>
+    <script>
+      // Account dropdown logic
+      const accountBtn = document.getElementById("accountDropdownBtn");
+      const dropdown = document.getElementById("accountDropdown");
+      document.addEventListener("click", function (e) {
+        if (accountBtn.contains(e.target)) {
+          dropdown.style.display =
+            dropdown.style.display === "block" ? "none" : "block";
+        } else if (!dropdown.contains(e.target)) {
+          dropdown.style.display = "none";
+        }
+      });
+    </script>
   </body>
 </html>

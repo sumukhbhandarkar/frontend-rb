@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign In - Refer Buddy</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      body.signup {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Montserrat", Arial, sans-serif;
+        display: flex;
+        background: #f7fafd;
+      }
+      .signup-container {
+        display: flex;
+        width: 100vw;
+        min-height: 100vh;
+      }
+      .signup-left {
+        flex: 1 1 0;
+        background: #f7fafd;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 40px 24px;
+      }
+      .signup-form {
+        width: 100%;
+        max-width: 400px;
+        background: #fff;
+        border-radius: 24px;
+        box-shadow: 0 4px 24px rgba(37, 99, 235, 0.07);
+        padding: 32px 32px 24px 32px;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+      }
+      .signup-info {
+        margin-bottom: 18px;
+        font-size: 0.98rem;
+        color: #2563eb;
+        background: #e9effd;
+        border-radius: 16px;
+        padding: 10px 18px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        border: 1px solid #b6d0fa;
+      }
+      .signup-back {
+        color: #5a6a85;
+        font-size: 0.98rem;
+        margin-bottom: 18px;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+      }
+      .signup-form button,
+      .signup-form .social-btn {
+        width: 100%;
+        border: none;
+        border-radius: 10px;
+        font-size: 1.08rem;
+        font-weight: 600;
+        padding: 12px 0;
+        margin-bottom: 8px;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+      .social-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        background: #2563eb;
+        color: #fff;
+        margin-bottom: 0;
+      }
+      .social-btn.google {
+        background: #f5f5f5;
+        color: #222;
+        border: 1px solid #e0e0e0;
+      }
+      .social-btn img {
+        height: 20px;
+        width: 20px;
+      }
+      .divider {
+        text-align: center;
+        color: #b0b8c9;
+        margin: 10px 0 0 0;
+        font-size: 0.95rem;
+        position: relative;
+      }
+      .divider:before,
+      .divider:after {
+        content: "";
+        display: inline-block;
+        width: 40%;
+        height: 1px;
+        background: #e3eafc;
+        vertical-align: middle;
+        margin: 0 8px;
+      }
+      .signup-form label {
+        font-weight: 600;
+        margin-bottom: 4px;
+        color: #2563eb;
+        font-size: 1rem;
+      }
+      .signup-form input[type="email"],
+      .signup-form input[type="password"] {
+        width: 100%;
+        padding: 12px;
+        border-radius: 8px;
+        border: 1px solid #cfd8e3;
+        font-size: 1rem;
+        margin-bottom: 6px;
+        background: #f7fafd;
+        transition: border 0.2s;
+      }
+      .signup-form input[type="email"]:focus,
+      .signup-form input[type="password"]:focus {
+        border: 1.5px solid #2563eb;
+        outline: none;
+      }
+      .signup-form .terms {
+        font-size: 0.92rem;
+        color: #5a6a85;
+        margin-bottom: 8px;
+      }
+      .signup-form .terms a {
+        color: #2563eb;
+        text-decoration: underline;
+      }
+      .signup-form .create-btn {
+        background: #2563eb;
+        color: #fff;
+        border-radius: 10px;
+        font-size: 1.12rem;
+        font-weight: 700;
+        margin-top: 8px;
+        margin-bottom: 0;
+        box-shadow: 0 2px 8px rgba(37, 99, 235, 0.08);
+        transition: background 0.2s;
+      }
+      .signup-form .create-btn:hover {
+        background: #174ea6;
+      }
+      .signup-form .login-link {
+        text-align: center;
+        margin-top: 10px;
+        font-size: 0.98rem;
+        color: #5a6a85;
+      }
+      .signup-form .login-link a {
+        color: #2563eb;
+        text-decoration: underline;
+        margin-left: 4px;
+      }
+      .signup-right {
+        flex: 1 1 0;
+        background: linear-gradient(135deg, #2563eb 0%, #7f53e9 100%);
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 0 60px;
+        min-height: 100vh;
+      }
+      .signup-right h2 {
+        font-size: 2.6rem;
+        font-weight: 800;
+        margin-bottom: 18px;
+        margin-top: 0;
+        line-height: 1.15;
+      }
+      .signup-right p {
+        font-size: 1.18rem;
+        color: #e3eafc;
+        margin-top: 0;
+      }
+      @media (max-width: 900px) {
+        .signup-right {
+          padding: 0 24px;
+        }
+        .signup-right h2 {
+          font-size: 2rem;
+        }
+      }
+      @media (max-width: 700px) {
+        .signup-container {
+          flex-direction: column;
+        }
+        .signup-left,
+        .signup-right {
+          flex: unset;
+          width: 100vw;
+          min-height: unset;
+          padding: 32px 8px;
+        }
+        .signup-right {
+          align-items: center;
+          text-align: center;
+          padding: 32px 8px;
+        }
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(16px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      #otpSection {
+        display: none;
+        margin-top: 18px;
+        padding: 18px 16px;
+        background: #f7fafd;
+        border: 2px solid #2563eb;
+        border-radius: 14px;
+        box-shadow: 0 2px 12px rgba(37, 99, 235, 0.07);
+        animation: fadeIn 0.4s;
+        box-sizing: border-box;
+        width: 100%;
+        max-width: 100%;
+      }
+      #otpSection label {
+        font-size: 1.08rem;
+        color: #2563eb;
+        font-weight: 700;
+        display: block;
+        margin-bottom: 8px;
+        text-align: left;
+      }
+      #otpSection input[type="text"] {
+        font-size: 1.4rem;
+        letter-spacing: 0.3em;
+        text-align: center;
+        padding: 14px;
+        border-radius: 8px;
+        border: 1.5px solid #b6d0fa;
+        background: #fff;
+        margin-top: 0;
+        margin-bottom: 8px;
+        width: 100%;
+        font-weight: 600;
+        box-sizing: border-box;
+        display: block;
+      }
+      #otpSection div {
+        color: #5a6a85;
+        font-size: 0.98rem;
+        margin-top: 4px;
+        text-align: left;
+      }
+      @media (max-width: 500px) {
+        #otpSection {
+          padding: 12px 4vw;
+        }
+        #otpSection input[type="text"] {
+          font-size: 1.1rem;
+          padding: 10px;
+        }
+      }
+      .spinner {
+        display: inline-block;
+        width: 22px;
+        height: 22px;
+        border: 3px solid #2563eb;
+        border-radius: 50%;
+        border-top: 3px solid #e9effd;
+        animation: spin 0.8s linear infinite;
+        vertical-align: middle;
+      }
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body class="signup">
+    <div class="signup-container">
+      <div class="signup-left">
+        <div class="signup-form">
+          <div class="signup-info">
+            <span style="font-size: 1.2em">🔑</span>
+            Welcome back! Sign in to your Refer Buddy account.
+          </div>
+          <a href="index.html" class="signup-back">← Back to Refer Buddy</a>
+          <a
+            href="/auth/linkedin"
+            class="social-btn"
+            style="
+              background: #2563eb;
+              color: #fff;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              gap: 10px;
+              text-decoration: none;
+              margin-bottom: 0;
+            "
+          >
+            <img
+              src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-original.svg"
+              alt="LinkedIn"
+            />
+            Sign in with LinkedIn
+          </a>
+          <div class="divider">or</div>
+          <form id="otpForm" method="POST" action="/auth/email/send-otp">
+            <label for="email"
+              >Email <span style="color: #e63946">*</span></label
+            >
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="Enter your email address"
+              required
+            />
+            <div
+              id="otpSection"
+              style="
+                display: none;
+                margin-top: 18px;
+                padding: 18px 16px;
+                background: #f7fafd;
+                border: 2px solid #2563eb;
+                border-radius: 14px;
+                box-shadow: 0 2px 12px rgba(37, 99, 235, 0.07);
+                animation: fadeIn 0.4s;
+              "
+            >
+              <label
+                for="otp"
+                style="font-size: 1.08rem; color: #2563eb; font-weight: 700"
+                >Enter OTP <span style="color: #e63946">*</span></label
+              >
+              <input
+                type="text"
+                id="otp"
+                name="otp"
+                placeholder="Enter the 6-digit code"
+                maxlength="6"
+                pattern="[0-9]{6}"
+                style="
+                  font-size: 1.4rem;
+                  letter-spacing: 0.3em;
+                  text-align: center;
+                  padding: 14px;
+                  border-radius: 8px;
+                  border: 1.5px solid #b6d0fa;
+                  background: #fff;
+                  margin-top: 8px;
+                  margin-bottom: 8px;
+                  width: 100%;
+                  font-weight: 600;
+                "
+                disabled
+              />
+              <div
+                id="otpMessage"
+                style="color: #5a6a85; font-size: 0.98rem; margin-top: 4px"
+              >
+                A code was sent to your email address.
+              </div>
+              <div
+                id="otpSpinner"
+                style="display: none; margin-top: 8px; text-align: center"
+              >
+                <span class="spinner"></span> Sending OTP...
+              </div>
+              <div id="resendRow" style="margin-top: 10px">
+                <a
+                  href="#"
+                  id="resendOtpLink"
+                  style="
+                    color: #2563eb;
+                    text-decoration: underline;
+                    font-weight: 600;
+                    display: none;
+                    cursor: pointer;
+                  "
+                  >Resend OTP</a
+                >
+                <span
+                  id="resendCountdown"
+                  style="color: #b0b8c9; font-size: 0.98rem; margin-left: 8px"
+                ></span>
+              </div>
+            </div>
+            <button class="create-btn" id="sendOtpBtn" type="submit">
+              Send OTP
+            </button>
+            <button
+              class="create-btn"
+              id="verifyOtpBtn"
+              type="submit"
+              style="display: none"
+              disabled
+            >
+              Verify & Sign In
+            </button>
+          </form>
+          <script>
+            const otpForm = document.getElementById("otpForm");
+            const otpSection = document.getElementById("otpSection");
+            const sendOtpBtn = document.getElementById("sendOtpBtn");
+            const verifyOtpBtn = document.getElementById("verifyOtpBtn");
+            const otpInput = document.getElementById("otp");
+            const otpSpinner = document.getElementById("otpSpinner");
+            const otpMessage = document.getElementById("otpMessage");
+            const resendOtpLink = document.getElementById("resendOtpLink");
+            const resendCountdown = document.getElementById("resendCountdown");
+            let emailValue = "";
+            let resendTimer = null;
+            function startResendTimer() {
+              let seconds = 30;
+              resendOtpLink.style.display = "none";
+              resendCountdown.textContent = `Resend available in ${seconds}s`;
+              resendCountdown.style.display = "inline";
+              resendTimer = setInterval(() => {
+                seconds--;
+                if (seconds > 0) {
+                  resendCountdown.textContent = `Resend available in ${seconds}s`;
+                } else {
+                  clearInterval(resendTimer);
+                  resendCountdown.textContent = "";
+                  resendOtpLink.style.display = "inline";
+                }
+              }, 1000);
+            }
+            otpForm.addEventListener("submit", function (e) {
+              if (otpSection.style.display === "none") {
+                // Step 1: Send OTP
+                e.preventDefault();
+                emailValue = document.getElementById("email").value;
+                otpSection.style.display = "block";
+                otpSpinner.style.display = "block";
+                otpInput.disabled = true;
+                verifyOtpBtn.disabled = true;
+                sendOtpBtn.style.display = "none";
+                startResendTimer();
+                fetch("/auth/email/send-otp", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ email: emailValue }),
+                })
+                  .then((res) => res.json())
+                  .then((data) => {
+                    otpSpinner.style.display = "none";
+                    if (data.success) {
+                      otpInput.disabled = false;
+                      verifyOtpBtn.disabled = false;
+                      verifyOtpBtn.style.display = "block";
+                      otpMessage.textContent =
+                        "A code was sent to your email address.";
+                    } else {
+                      otpSection.style.display = "none";
+                      sendOtpBtn.style.display = "block";
+                      alert(data.message || "Failed to send OTP.");
+                    }
+                  });
+              } else {
+                // Step 2: Verify OTP
+                e.preventDefault();
+                const otpValue = otpInput.value;
+                fetch("/auth/email/verify-otp", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ email: emailValue, otp: otpValue }),
+                })
+                  .then((res) => res.json())
+                  .then((data) => {
+                    if (data.success) {
+                      window.location.href = "/dashboard.html";
+                    } else {
+                      alert(data.message || "Invalid OTP.");
+                    }
+                  });
+              }
+            });
+            resendOtpLink.addEventListener("click", function (e) {
+              e.preventDefault();
+              resendOtpLink.style.display = "none";
+              otpSpinner.style.display = "block";
+              otpInput.disabled = true;
+              verifyOtpBtn.disabled = true;
+              startResendTimer();
+              fetch("/auth/email/send-otp", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email: emailValue }),
+              })
+                .then((res) => res.json())
+                .then((data) => {
+                  otpSpinner.style.display = "none";
+                  if (data.success) {
+                    otpInput.disabled = false;
+                    verifyOtpBtn.disabled = false;
+                    otpMessage.textContent =
+                      "A new code was sent to your email address.";
+                  } else {
+                    otpMessage.textContent = "Failed to resend OTP.";
+                  }
+                });
+            });
+          </script>
+          <div class="login-link">
+            New to Refer Buddy? <a href="signup.html">Sign up</a>
+          </div>
+        </div>
+      </div>
+      <div class="signup-right">
+        <h2>Welcome Back to Refer Buddy</h2>
+        <p>Sign in to access your dashboard, request referrals, and more!</p>
+      </div>
+    </div>
+  </body>
+</html>

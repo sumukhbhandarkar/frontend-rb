@@ -1,4 +1,4 @@
-// Required dependencies: axios, jsonwebtoken, pg, express-session, connect-pg-simple
+// Required dependencies: axios, jsonwebtoken, pg, express-session, connect-pg-simple, nodemailer
 const express = require("express");
 const path = require("path");
 const axios = require("axios");
@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken");
 const { Pool } = require("pg");
 const session = require("express-session");
 const pgSession = require("connect-pg-simple")(session);
+const nodemailer = require("nodemailer");
 require("dotenv").config();
 
 const CLIENT_ID = process.env.LINKEDIN_CLIENT_ID;
@@ -41,6 +42,8 @@ app.use(
     },
   })
 );
+
+app.use(express.json()); // for parsing JSON bodies
 
 // Serve all static files except dashboard.html
 app.use((req, res, next) => {
@@ -136,6 +139,75 @@ app.get(["/", "/index.html"], (req, res) => {
     return res.redirect("/dashboard.html");
   }
   res.sendFile(path.join(__dirname, "public", "index.html"));
+});
+
+// Email OTP sign-in endpoints
+app.post("/auth/email/send-otp", async (req, res) => {
+  const { email } = req.body;
+  if (!email) return res.json({ success: false, message: "Email required." });
+  // Generate 6-digit OTP
+  const otp = Math.floor(100000 + Math.random() * 900000).toString();
+  req.session.otp = otp;
+  req.session.otpEmail = email;
+  // Send OTP email
+  try {
+    // Configure nodemailer (use your SMTP or Gmail credentials)
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: "Your Refer Buddy OTP",
+      text: `Your OTP for Refer Buddy sign-in is: ${otp}`,
+    });
+    res.json({ success: true });
+  } catch (err) {
+    console.error("OTP email error:", err);
+    res.json({ success: false, message: "Failed to send OTP email." });
+  }
+});
+
+app.post("/auth/email/verify-otp", async (req, res) => {
+  const { email, otp } = req.body;
+  if (!email || !otp)
+    return res.json({ success: false, message: "Email and OTP required." });
+  if (req.session.otp !== otp || req.session.otpEmail !== email) {
+    return res.json({ success: false, message: "Invalid OTP." });
+  }
+  // OTP is valid, log in user
+  try {
+    // Check if user exists
+    let userRes = await pool.query("SELECT * FROM users WHERE email = $1", [
+      email,
+    ]);
+    let user = userRes.rows[0];
+    if (!user) {
+      // Create user with just email
+      const insertRes = await pool.query(
+        "INSERT INTO users (email) VALUES ($1) RETURNING *",
+        [email]
+      );
+      user = insertRes.rows[0];
+    }
+    req.session.user = {
+      id: user.id || user.linkedin_id,
+      name: user.name || "",
+      email: user.email,
+      picture: user.picture || "",
+    };
+    // Clear OTP from session
+    delete req.session.otp;
+    delete req.session.otpEmail;
+    res.json({ success: true });
+  } catch (err) {
+    console.error("OTP verify error:", err);
+    res.json({ success: false, message: "Server error." });
+  }
 });
 
 // Fallback for all other routes
