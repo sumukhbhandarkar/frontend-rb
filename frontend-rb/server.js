@@ -8,13 +8,16 @@ require("dotenv").config();
 
 const LINKEDIN_KEY = process.env.LINKEDIN_CLIENT_ID;
 const LINKEDIN_SECRET = process.env.LINKEDIN_CLIENT_SECRET;
+const LINKEDIN_CALLBACK_URL =
+  process.env.LINKEDIN_CALLBACK_URL ||
+  "http://localhost:3000/auth/linkedin/callback";
 
 passport.use(
   new LinkedInStrategy(
     {
       clientID: LINKEDIN_KEY,
       clientSecret: LINKEDIN_SECRET,
-      callbackURL: "http://localhost:3000/auth/linkedin/callback",
+      callbackURL: LINKEDIN_CALLBACK_URL,
       scope: ["r_liteprofile"],
     },
     function (accessToken, refreshToken, profile, done) {
