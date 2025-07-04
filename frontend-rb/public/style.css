@@ -1,0 +1,147 @@
+body {
+  margin: 0;
+  font-family: "Inter", Arial, sans-serif;
+  background: #f6f8fa;
+  color: #222;
+}
+
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 32px 64px 0 64px;
+  background: transparent;
+}
+.logo {
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -1px;
+  color: #444;
+}
+.logo span {
+  color: #2563eb;
+}
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+.nav-links a {
+  text-decoration: none;
+  color: #444;
+  font-weight: 500;
+  font-size: 1rem;
+  transition: color 0.2s;
+}
+.nav-links a:hover {
+  color: #2563eb;
+}
+.signup-btn {
+  background: #2563eb;
+  color: #fff !important;
+  padding: 10px 28px;
+  border-radius: 10px;
+  font-weight: 600;
+  margin-left: 24px;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: background 0.2s;
+}
+.signup-btn:hover {
+  background: #174ea6;
+}
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 80px;
+  text-align: center;
+}
+.hero h1 {
+  font-size: 3rem;
+  font-weight: 800;
+  margin: 0;
+  line-height: 1.1;
+  color: #111;
+}
+.hero h1 span {
+  color: #2563eb;
+}
+.subtext {
+  color: #6b7280;
+  font-size: 1.2rem;
+  margin: 32px 0 0 0;
+}
+.cards-row {
+  display: flex;
+  gap: 24px;
+  margin: 40px 0 0 0;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+  padding: 24px 32px;
+  min-width: 260px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 1.1rem;
+}
+.company-icon {
+  font-size: 2rem;
+}
+.company-logo {
+  height: 28px;
+  width: auto;
+  margin-right: 12px;
+  vertical-align: middle;
+}
+.cta-btn {
+  display: block;
+  background: #2563eb;
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.3rem;
+  padding: 20px 48px;
+  border-radius: 12px;
+  margin: 48px auto 0 auto;
+  text-align: center;
+  text-decoration: none;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.08);
+  transition: background 0.2s;
+}
+.cta-btn:hover {
+  background: #174ea6;
+}
+.secondary-btn {
+  display: block;
+  background: #fff;
+  color: #2563eb;
+  font-weight: 600;
+  font-size: 1.1rem;
+  padding: 14px 32px;
+  border-radius: 10px;
+  margin: 24px auto 0 auto;
+  text-align: center;
+  text-decoration: none;
+  border: 2px solid #2563eb;
+  transition: background 0.2s, color 0.2s;
+}
+.secondary-btn:hover {
+  background: #2563eb;
+  color: #fff;
+}
+
+@media (max-width: 700px) {
+  .navbar {
+    flex-direction: column;
+    padding: 24px 12px 0 12px;
+  }
+  .hero h1 {
+    font-size: 2.1rem;
+  }
+}
