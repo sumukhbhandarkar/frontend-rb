@@ -48,9 +48,9 @@ app.use(
 app.use(express.json()); // for parsing JSON bodies
 app.use(express.urlencoded({ extended: true })); // for parsing form data
 
-// Serve all static files except dashboard.html
+// Serve all static files except subscription.html
 app.use((req, res, next) => {
-  if (req.path === "/dashboard.html") return next();
+  if (req.path === "/subscription.html") return next();
   express.static(path.join(__dirname, "public"))(req, res, next);
 });
 
@@ -140,7 +140,7 @@ app.get("/auth/linkedin/callback", async (req, res) => {
       picture: decoded.picture,
     };
     // Redirect to dashboard
-    res.redirect("/dashboard.html");
+    res.redirect("/subscription.html");
   } catch (err) {
     console.error(
       "LinkedIn OAuth error:",
