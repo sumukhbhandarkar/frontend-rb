@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Account Settings - Refer Buddy</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css"
+    />
+    <style>
+      body {
+        margin: 0;
+        font-family: "Montserrat", Arial, sans-serif;
+        background: #f7fafd;
+      }
+      .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 24px 48px 16px 48px;
+        background: #fff;
+        box-shadow: 0 2px 8px rgba(37, 99, 235, 0.04);
+      }
+      .logo {
+        font-size: 2rem;
+        font-weight: 700;
+        letter-spacing: -1px;
+        color: #444;
+        display: flex;
+        align-items: center;
+      }
+      .logo span {
+        color: #2563eb;
+        margin-left: 2px;
+      }
+      .nav {
+        display: flex;
+        align-items: center;
+        gap: 36px;
+      }
+      .nav-link {
+        text-decoration: none;
+        color: #444;
+        font-weight: 600;
+        font-size: 1.08rem;
+        transition: color 0.2s;
+        position: relative;
+        padding: 0 4px;
+      }
+      .nav-link:hover {
+        color: #2563eb;
+      }
+      .account {
+        color: #444;
+        font-weight: 600;
+        font-size: 1.08rem;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        cursor: pointer;
+      }
+      .banner {
+        background: #ffebee;
+        color: #c62828;
+        padding: 18px 0;
+        text-align: center;
+        font-size: 1.08rem;
+        font-weight: 600;
+        border-bottom: 1.5px solid #ffcdd2;
+      }
+      .banner button {
+        background: #fff;
+        color: #c62828;
+        border: 1.5px solid #ffcdd2;
+        border-radius: 8px;
+        font-weight: 600;
+        margin-left: 18px;
+        padding: 7px 18px;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: background 0.2s, color 0.2s;
+      }
+      .banner button:hover {
+        background: #ffcdd2;
+        color: #b71c1c;
+      }
+      .settings-container {
+        max-width: 1100px;
+        margin: 36px auto 0 auto;
+        display: flex;
+        gap: 32px;
+        align-items: flex-start;
+        justify-content: center;
+      }
+      .settings-card {
+        background: #fff;
+        border-radius: 18px;
+        box-shadow: 0 4px 24px rgba(37, 99, 235, 0.07);
+        padding: 32px 32px 24px 32px;
+        flex: 2 1 0;
+        min-width: 340px;
+        max-width: 600px;
+      }
+      .settings-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin-bottom: 18px;
+        color: #222;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .settings-form {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+      }
+      .settings-form-row {
+        display: flex;
+        gap: 18px;
+      }
+      .settings-form-row > div,
+      .bio-row > div {
+        flex: 1 1 0;
+        display: flex;
+        flex-direction: column;
+      }
+      .settings-form input,
+      .settings-form select {
+        width: 100%;
+        box-sizing: border-box;
+        border-radius: 12px;
+        border: 1.5px solid #cfd8e3;
+        background: #f7fafd;
+        font-size: 1.08rem;
+        padding: 14px 16px;
+        margin-bottom: 2px;
+        transition: border 0.2s, box-shadow 0.2s;
+        box-shadow: 0 2px 8px rgba(37, 99, 235, 0.04);
+      }
+      .settings-form input:focus,
+      .settings-form select:focus {
+        border: 2px solid #2563eb;
+        background: #fff;
+        box-shadow: 0 4px 16px rgba(37, 99, 235, 0.1);
+        outline: none;
+      }
+      .settings-form textarea {
+        min-height: 120px;
+        width: 100%;
+        resize: none;
+        background: #f7fafd;
+        border: 1.5px solid #cfd8e3;
+        font-size: 1.08rem;
+        padding: 16px;
+        transition: border 0.2s, box-shadow 0.2s;
+        box-shadow: 0 2px 8px rgba(37, 99, 235, 0.07);
+        border-radius: 12px;
+        margin-bottom: 2px;
+        display: block;
+        box-sizing: border-box;
+      }
+      .settings-form textarea:focus {
+        border: 2px solid #2563eb;
+        background: #fff;
+        box-shadow: 0 4px 16px rgba(37, 99, 235, 0.1);
+      }
+      .settings-form label {
+        font-weight: 600;
+        color: #2563eb;
+        margin-bottom: 4px;
+        font-size: 1rem;
+      }
+      .settings-form .small {
+        font-size: 0.92rem;
+        color: #5a6a85;
+        margin-top: 2px;
+      }
+      .settings-form .checkbox-row {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-top: 8px;
+      }
+      .switch {
+        position: relative;
+        display: inline-block;
+        width: 48px;
+        height: 28px;
+        margin-right: 10px;
+      }
+      .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: #cfd8e3;
+        transition: 0.3s;
+        border-radius: 28px;
+      }
+      .slider:before {
+        position: absolute;
+        content: "";
+        height: 22px;
+        width: 22px;
+        left: 3px;
+        bottom: 3px;
+        background: #fff;
+        transition: 0.3s;
+        border-radius: 50%;
+        box-shadow: 0 2px 8px rgba(37, 99, 235, 0.1);
+      }
+      input:checked + .slider {
+        background: linear-gradient(90deg, #2563eb 0%, #7f53e9 100%);
+      }
+      input:checked + .slider:before {
+        transform: translateX(20px);
+        background: #fff;
+      }
+      .settings-form .checkbox-row label {
+        margin-bottom: 0;
+        font-weight: 600;
+        color: #2563eb;
+        font-size: 1.05rem;
+        cursor: pointer;
+      }
+      .settings-form .resume-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-top: 8px;
+        flex-wrap: wrap;
+      }
+      .resume-upload-box {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        background: #f7fafd;
+        border: 1.5px solid #cfd8e3;
+        border-radius: 12px;
+        padding: 18px 18px 18px 18px;
+        box-shadow: 0 4px 16px rgba(37, 99, 235, 0.07);
+        width: 100%;
+        max-width: 520px;
+        position: relative;
+      }
+      .resume-upload-box:focus-within {
+        border: 2px solid #2563eb;
+        background: #fff;
+        box-shadow: 0 6px 24px rgba(37, 99, 235, 0.12);
+      }
+      .resume-file-label {
+        background: #fff;
+        color: #2563eb;
+        font-weight: 600;
+        border-radius: 8px;
+        padding: 10px 22px;
+        cursor: pointer;
+        font-size: 1rem;
+        border: 2px solid #2563eb;
+        transition: background 0.2s, color 0.2s, border 0.2s;
+        margin-right: 8px;
+        display: inline-block;
+      }
+      .resume-file-label:hover {
+        background: #2563eb;
+        color: #fff;
+        border: 2px solid #174ea6;
+      }
+      .resume-file-input {
+        display: none;
+      }
+      .resume-file-name {
+        color: #222;
+        font-size: 1rem;
+        font-weight: 500;
+        margin-right: 8px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 220px;
+        min-width: 120px;
+        display: inline-block;
+        vertical-align: middle;
+        background: #f7fafd;
+        border-radius: 6px;
+        padding: 6px 10px;
+        border: 1px solid #e3eafc;
+      }
+      .resume-btn {
+        background: #2563eb;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        font-weight: 700;
+        padding: 10px 22px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background 0.2s;
+        margin-left: 0;
+        box-shadow: 0 2px 8px rgba(37, 99, 235, 0.08);
+      }
+      .resume-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+      .resume-btn:hover:not(:disabled) {
+        background: #174ea6;
+      }
+      .settings-form .resume-link {
+        color: #2563eb;
+        text-decoration: underline;
+        font-weight: 600;
+        font-size: 1rem;
+      }
+      .save-btn {
+        background: linear-gradient(90deg, #7f53e9 0%, #2563eb 100%);
+        color: #fff;
+        font-weight: 700;
+        font-size: 1.1rem;
+        padding: 14px 32px;
+        border-radius: 14px;
+        border: none;
+        margin-top: 24px;
+        box-shadow: 0 2px 8px rgba(37, 99, 235, 0.1);
+        transition: background 0.2s, box-shadow 0.2s;
+        cursor: pointer;
+      }
+      .save-btn:hover {
+        background: linear-gradient(90deg, #2563eb 0%, #7f53e9 100%);
+        box-shadow: 0 4px 16px rgba(37, 99, 235, 0.16);
+      }
+      .subscription-card {
+        background: #fff;
+        border-radius: 18px;
+        box-shadow: 0 4px 24px rgba(37, 99, 235, 0.07);
+        padding: 32px 32px 24px 32px;
+        flex: 1 1 0;
+        min-width: 260px;
+        max-width: 340px;
+        margin-top: 0;
+      }
+      .subscription-title {
+        font-size: 1.15rem;
+        font-weight: 700;
+        margin-bottom: 14px;
+        color: #222;
+      }
+      .subscription-info {
+        color: #2563eb;
+        background: #e9effd;
+        border: 1px solid #b6d0fa;
+        border-radius: 10px;
+        padding: 12px 16px;
+        font-size: 1rem;
+        margin-bottom: 18px;
+      }
+      .subscription-btn {
+        background: linear-gradient(90deg, #7f53e9 0%, #2563eb 100%);
+        color: #fff;
+        font-weight: 700;
+        font-size: 1.08rem;
+        padding: 12px 0;
+        border-radius: 12px;
+        border: none;
+        width: 100%;
+        margin-top: 10px;
+        cursor: pointer;
+        transition: background 0.2s, box-shadow 0.2s;
+      }
+      .subscription-btn:hover {
+        background: linear-gradient(90deg, #2563eb 0%, #7f53e9 100%);
+        box-shadow: 0 4px 16px rgba(37, 99, 235, 0.16);
+      }
+      @media (max-width: 1100px) {
+        .settings-container {
+          flex-direction: column;
+          gap: 24px;
+          align-items: stretch;
+        }
+        .settings-card,
+        .subscription-card {
+          max-width: 100%;
+        }
+      }
+      @media (max-width: 700px) {
+        .header {
+          flex-direction: column;
+          align-items: flex-start;
+          padding: 18px 12px 10px 12px;
+          gap: 12px;
+        }
+        .settings-container {
+          padding: 0 8px;
+        }
+        .settings-card,
+        .subscription-card {
+          padding: 18px 8px 14px 8px;
+        }
+      }
+      .info-tooltip {
+        position: relative;
+        display: inline-block;
+        margin-left: 6px;
+        vertical-align: middle;
+      }
+      .info-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 18px;
+        height: 18px;
+        background: #2563eb;
+        color: #fff;
+        border-radius: 50%;
+        font-size: 0.85em;
+        font-weight: 700;
+        cursor: pointer;
+        transition: background 0.2s;
+        box-shadow: 0 1px 4px rgba(37, 99, 235, 0.08);
+      }
+      .info-tooltip:hover .info-icon {
+        background: #174ea6;
+      }
+      .tooltip-text {
+        visibility: hidden;
+        opacity: 0;
+        width: 260px;
+        background: #222;
+        color: #fff;
+        text-align: left;
+        border-radius: 8px;
+        padding: 10px 14px;
+        position: absolute;
+        z-index: 10;
+        bottom: 130%;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 0.98em;
+        font-weight: 400;
+        box-shadow: 0 2px 12px rgba(37, 99, 235, 0.1);
+        transition: opacity 0.2s;
+        pointer-events: none;
+      }
+      .info-tooltip:hover .tooltip-text {
+        visibility: visible;
+        opacity: 1;
+      }
+      .resume-btn-disabled {
+        position: relative;
+      }
+      .resume-tooltip {
+        visibility: hidden;
+        opacity: 0;
+        width: 240px;
+        background: #222;
+        color: #fff;
+        text-align: left;
+        border-radius: 8px;
+        padding: 10px 14px;
+        position: absolute;
+        z-index: 10;
+        bottom: 120%;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 0.98em;
+        font-weight: 400;
+        box-shadow: 0 2px 12px rgba(37, 99, 235, 0.1);
+        transition: opacity 0.2s;
+        pointer-events: none;
+        white-space: normal;
+      }
+      .resume-btn-disabled:hover .resume-tooltip {
+        visibility: visible;
+        opacity: 1;
+      }
+      .replace-link:hover {
+        color: #174ea6;
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="header">
+      <div class="logo">Refer <span>Buddy</span></div>
+      <nav class="nav">
+        <a href="#" class="nav-link">Request Referrals</a>
+        <a href="#" class="nav-link">Referral Marketplace</a>
+        <span class="nav-link">Resume Tools &#9662;</span>
+        <span class="nav-link">Premium <span class="fire">🔥</span></span>
+        <span class="account">Account &#9662;</span>
+      </nav>
+    </header>
+    <div class="banner">
+      Your mobile number is not verified. Please verify to enable all features.
+      <button>Verify mobile</button>
+    </div>
+    <div class="settings-container">
+      <div class="settings-card">
+        <div class="settings-title">Account Details</div>
+        <form class="settings-form">
+          <div class="settings-form-row">
+            <div>
+              <label for="firstName">First name *</label>
+              <input
+                type="text"
+                id="firstName"
+                name="firstName"
+                placeholder="First name"
+                required
+              />
+            </div>
+            <div>
+              <label for="lastName">Last name *</label>
+              <input
+                type="text"
+                id="lastName"
+                name="lastName"
+                placeholder="Last name"
+                required
+              />
+            </div>
+          </div>
+          <div class="bio-row">
+            <div>
+              <label for="bio"
+                >Bio *
+                <span class="info-tooltip">
+                  <span class="info-icon">i</span>
+                  <span class="tooltip-text"
+                    >A short summary about you and your goals. This helps our AI
+                    write better cover letters for you!</span
+                  >
+                </span>
+              </label>
+              <textarea
+                id="bio"
+                name="bio"
+                maxlength="1028"
+                placeholder="Tell us about yourself"
+                required
+              ></textarea>
+              <div class="small" id="bioCount">(0/1028)</div>
+            </div>
+          </div>
+          <div>
+            <label for="title">Professional title *</label>
+            <input
+              type="text"
+              id="title"
+              name="title"
+              placeholder="Ex: Software Engineer | Student @ IIT | HR Professional | SDET at Juniper"
+              required
+            />
+          </div>
+          <div class="settings-form-row">
+            <div>
+              <label for="experience">Years of experience *</label>
+              <input
+                type="number"
+                id="experience"
+                name="experience"
+                placeholder="Ex: 10"
+                min="0"
+                step="1"
+                pattern="[0-9]+"
+                required
+              />
+            </div>
+            <div>
+              <label for="location">Location *</label>
+              <input
+                type="text"
+                id="location"
+                name="location"
+                placeholder="Ex: Bengaluru, India"
+                required
+              />
+            </div>
+          </div>
+          <div class="checkbox-row">
+            <label class="switch">
+              <input type="checkbox" id="relocate" name="relocate" />
+              <span class="slider"></span>
+            </label>
+            <label for="relocate">Open to relocation?</label>
+          </div>
+          <div class="resume-row" id="resumeRow">
+            <label for="resume">Resume *</label>
+            <div class="resume-upload-box" id="resumeUploadSection">
+              <label class="resume-file-label" for="resumeFile"
+                >Choose File</label
+              >
+              <input
+                type="file"
+                id="resumeFile"
+                name="resumeFile"
+                accept="application/pdf,.doc,.docx"
+                class="resume-file-input"
+              />
+              <span class="resume-file-name" id="resumeFileName"
+                >No file chosen</span
+              >
+              <button class="resume-btn" id="uploadResumeBtn" type="button">
+                Upload Resume
+              </button>
+            </div>
+            <div
+              id="resumeDisplaySection"
+              style="display: none; align-items: center; gap: 12px"
+            >
+              <a
+                href="#"
+                class="resume-link"
+                id="resumeLink"
+                style="
+                  max-width: 220px;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                  white-space: nowrap;
+                  display: inline-block;
+                  vertical-align: middle;
+                "
+                target="_blank"
+                rel="noopener"
+              ></a>
+              <a
+                href="#"
+                id="replaceResumeLink"
+                class="replace-link"
+                style="
+                  margin-left: 10px;
+                  color: #2563eb;
+                  font-size: 0.98em;
+                  text-decoration: underline;
+                  cursor: pointer;
+                "
+                >Replace</a
+              >
+              <button
+                class="resume-btn resume-btn-disabled"
+                type="button"
+                disabled
+                style="opacity: 0.6; cursor: not-allowed; position: relative"
+              >
+                Manage your resumes
+                <span class="resume-tooltip"
+                  >This feature is available only for paid users.</span
+                >
+              </button>
+            </div>
+          </div>
+          <button class="save-btn" type="submit">Save Changes</button>
+        </form>
+      </div>
+      <div class="subscription-card">
+        <div class="subscription-title">Subscription</div>
+        <div class="subscription-info">
+          Our Refer Buddy Premium subscription includes unlimited referrals,
+          resume feedback and much more. Learn more about it
+          <a href="#" style="color: #2563eb; text-decoration: underline">here</a
+          >!
+        </div>
+        <button class="subscription-btn">✨ Get Premium</button>
+      </div>
+    </div>
+    <script>
+      // Bio character count
+      const bio = document.getElementById("bio");
+      const bioCount = document.getElementById("bioCount");
+      bio.addEventListener("input", function () {
+        bioCount.textContent = `(${bio.value.length}/1028)`;
+      });
+
+      // Resume upload logic
+      const uploadBtn = document.getElementById("uploadResumeBtn");
+      const fileInput = document.getElementById("resumeFile");
+      const fileNameSpan = document.getElementById("resumeFileName");
+      const resumeDisplaySection = document.getElementById(
+        "resumeDisplaySection"
+      );
+      const resumeUploadSection = document.getElementById(
+        "resumeUploadSection"
+      );
+      const resumeLink = document.getElementById("resumeLink");
+      const replaceResumeLink = document.getElementById("replaceResumeLink");
+
+      fileInput.addEventListener("change", function () {
+        fileNameSpan.textContent = fileInput.files[0]
+          ? fileInput.files[0].name
+          : "No file chosen";
+      });
+
+      // Simulate: If you want to show an uploaded resume by default, set this variable
+      let uploadedResume = null; // e.g. { name: 'resume.pdf', url: '/uploads/resume.pdf' }
+
+      function showResume(resume) {
+        resumeUploadSection.style.display = "none";
+        resumeDisplaySection.style.display = "flex";
+        let displayName = resume.name;
+        if (displayName.length > 24) {
+          displayName = displayName.slice(0, 21) + "...";
+        }
+        resumeLink.textContent = displayName;
+        resumeLink.href = resume.url;
+        resumeLink.title = resume.name;
+      }
+
+      if (uploadedResume) {
+        showResume(uploadedResume);
+      }
+
+      uploadBtn.addEventListener("click", function () {
+        const file = fileInput.files[0];
+        if (!file) {
+          alert("Please select a file to upload.");
+          return;
+        }
+        const formData = new FormData();
+        formData.append("resume", file);
+        uploadBtn.disabled = true;
+        uploadBtn.textContent = "Uploading...";
+        fetch("/upload-resume", {
+          method: "POST",
+          body: formData,
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            uploadBtn.disabled = false;
+            uploadBtn.textContent = "Upload Resume";
+            if (data.success && data.url && data.name) {
+              showResume({ name: data.name, url: data.url });
+            } else {
+              alert(data.message || "Failed to upload resume.");
+            }
+          })
+          .catch(() => {
+            uploadBtn.disabled = false;
+            uploadBtn.textContent = "Upload Resume";
+            alert("Failed to upload resume.");
+          });
+      });
+
+      replaceResumeLink.addEventListener("click", function (e) {
+        e.preventDefault();
+        resumeDisplaySection.style.display = "none";
+        resumeUploadSection.style.display = "flex";
+        fileInput.value = "";
+        fileNameSpan.textContent = "No file chosen";
+      });
+    </script>
+  </body>
+</html>

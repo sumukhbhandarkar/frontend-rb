@@ -1,4 +1,4 @@
-// Required dependencies: axios, jsonwebtoken, pg, express-session, connect-pg-simple, nodemailer
+// Required dependencies: axios, jsonwebtoken, pg, express-session, connect-pg-simple, nodemailer, multer
 const express = require("express");
 const path = require("path");
 const axios = require("axios");
@@ -7,6 +7,8 @@ const { Pool } = require("pg");
 const session = require("express-session");
 const pgSession = require("connect-pg-simple")(session);
 const nodemailer = require("nodemailer");
+const multer = require("multer");
+const fs = require("fs");
 require("dotenv").config();
 
 const CLIENT_ID = process.env.LINKEDIN_CLIENT_ID;
@@ -49,6 +51,40 @@ app.use(express.json()); // for parsing JSON bodies
 app.use((req, res, next) => {
   if (req.path === "/dashboard.html") return next();
   express.static(path.join(__dirname, "public"))(req, res, next);
+});
+
+// Ensure uploads directory exists
+const uploadDir = path.join(__dirname, "uploads");
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir);
+}
+
+// Multer setup for resume uploads
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, uploadDir);
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    const ext = path.extname(file.originalname);
+    cb(null, file.fieldname + "-" + uniqueSuffix + ext);
+  },
+});
+const upload = multer({
+  storage: storage,
+  fileFilter: function (req, file, cb) {
+    const allowed = [
+      "application/pdf",
+      "application/msword",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    ];
+    if (allowed.includes(file.mimetype)) {
+      cb(null, true);
+    } else {
+      cb(new Error("Only PDF, DOC, and DOCX files are allowed."));
+    }
+  },
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
 });
 
 app.get("/auth/linkedin", (req, res) => {
@@ -209,6 +245,18 @@ app.post("/auth/email/verify-otp", async (req, res) => {
     res.json({ success: false, message: "Server error." });
   }
 });
+
+app.post("/upload-resume", upload.single("resume"), (req, res) => {
+  if (!req.file) {
+    return res.json({ success: false, message: "No file uploaded." });
+  }
+  // Optionally, you can save the file info to the user in the DB here
+  const fileUrl = "/uploads/" + req.file.filename;
+  res.json({ success: true, name: req.file.originalname, url: fileUrl });
+});
+
+// Serve uploaded files statically
+app.use("/uploads", express.static(uploadDir));
 
 // Fallback for all other routes
 app.get("*", (req, res) => {
