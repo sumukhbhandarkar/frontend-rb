@@ -475,6 +475,29 @@ app.get("/api/companies/:id", async (req, res) => {
 // Serve uploaded files statically
 app.use("/uploads", express.static(uploadDir));
 
+// Logout route
+app.get("/logout", (req, res) => {
+  req.session.destroy(() => {
+    res.redirect("/index.html");
+  });
+});
+
+// Protect homepage.html
+app.get("/homepage.html", (req, res) => {
+  if (!req.session.user) {
+    return res.redirect("/signin.html");
+  }
+  res.sendFile(path.join(__dirname, "public", "homepage.html"));
+});
+
+// Protect company.html
+app.get("/company.html", (req, res) => {
+  if (!req.session.user) {
+    return res.redirect("/signin.html");
+  }
+  res.sendFile(path.join(__dirname, "public", "company.html"));
+});
+
 // Fallback for all other routes
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
