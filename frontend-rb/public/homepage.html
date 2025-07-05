@@ -260,6 +260,56 @@
       </div>
       <div class="companies-title">Companies</div>
       <div class="companies-grid" id="companiesGrid"></div>
+      <div
+        id="accountDropdown"
+        style="
+          display: none;
+          position: absolute;
+          right: 48px;
+          top: 70px;
+          background: #fff;
+          box-shadow: 0 2px 8px rgba(37, 99, 235, 0.08);
+          border-radius: 10px;
+          min-width: 160px;
+          z-index: 1000;
+        "
+      >
+        <a
+          href="subscription.html"
+          style="
+            display: block;
+            padding: 12px 20px;
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 600;
+            border-bottom: 1px solid #f0f4f8;
+          "
+          >Referrals Dashboard</a
+        >
+        <a
+          href="account.html"
+          style="
+            display: block;
+            padding: 12px 20px;
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 600;
+            border-bottom: 1px solid #f0f4f8;
+          "
+          >Account Settings</a
+        >
+        <a
+          href="/logout"
+          style="
+            display: block;
+            padding: 12px 20px;
+            color: #e63946;
+            text-decoration: none;
+            font-weight: 600;
+          "
+          >Logout</a
+        >
+      </div>
       <script>
         async function loadCompanies() {
           const grid = document.getElementById("companiesGrid");
@@ -279,7 +329,9 @@
                 .map((tag) => `<span class="tag">${tag}</span>`)
                 .join(" ");
               grid.innerHTML += `
-              <div class="company-card">
+              <div class="company-card" style="cursor:pointer;" onclick="window.location.href='company.html?id=${
+                company.id
+              }'">
                 <div class="company-header">
                   <img class="company-logo" src="${
                     company.logo_url || ""
@@ -298,6 +350,18 @@
           }
         }
         document.addEventListener("DOMContentLoaded", loadCompanies);
+
+        // Account dropdown logic
+        const accountBtn = document.getElementById("accountDropdownBtn");
+        const dropdown = document.getElementById("accountDropdown");
+        document.addEventListener("click", function (e) {
+          if (accountBtn && accountBtn.contains(e.target)) {
+            dropdown.style.display =
+              dropdown.style.display === "block" ? "none" : "block";
+          } else if (dropdown && !dropdown.contains(e.target)) {
+            dropdown.style.display = "none";
+          }
+        });
       </script>
     </div>
   </body>

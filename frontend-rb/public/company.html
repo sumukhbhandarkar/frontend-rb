@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Company Details - Refer Buddy</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Montserrat", Arial, sans-serif;
+        background: #f7fafd;
+        color: #222;
+        margin: 0;
+      }
+      .main-container {
+        max-width: 1200px;
+        margin: 48px auto;
+        display: flex;
+        gap: 32px;
+        align-items: flex-start;
+        justify-content: center;
+        padding: 0 12px;
+      }
+      .left-col {
+        flex: 2 1 0;
+        min-width: 340px;
+        max-width: 700px;
+      }
+      .right-col {
+        flex: 1 1 0;
+        min-width: 260px;
+        max-width: 340px;
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
+      .company-card {
+        background: #fff;
+        border-radius: 18px;
+        box-shadow: 0 4px 24px rgba(37, 99, 235, 0.07);
+        padding: 32px 32px 24px 32px;
+        margin-bottom: 24px;
+      }
+      .company-header {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        margin-bottom: 12px;
+      }
+      .company-logo {
+        width: 64px;
+        height: 64px;
+        object-fit: contain;
+        border-radius: 12px;
+        background: #f7fafd;
+        border: 1px solid #e3eafc;
+      }
+      .company-title {
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: #222;
+      }
+      .company-meta {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        color: #5a6a85;
+        font-size: 1.02rem;
+        margin-bottom: 6px;
+      }
+      .company-tags {
+        margin-top: 10px;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      .tag {
+        font-size: 0.98rem;
+        font-weight: 600;
+        padding: 5px 14px;
+        border-radius: 8px;
+        background: #f7fafd;
+        color: #2563eb;
+        border: 1px solid #e3eafc;
+      }
+      .refer-btn {
+        background: #2563eb;
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        font-weight: 700;
+        font-size: 1.08rem;
+        padding: 12px 32px;
+        cursor: pointer;
+        transition: background 0.2s;
+        float: right;
+      }
+      .refer-btn:hover {
+        background: #174ea6;
+      }
+      .section {
+        background: #fff;
+        border-radius: 18px;
+        box-shadow: 0 4px 24px rgba(37, 99, 235, 0.07);
+        padding: 28px 32px 22px 32px;
+        margin-bottom: 24px;
+      }
+      .section-title {
+        font-size: 1.15rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+        color: #2563eb;
+      }
+      .about-links {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 8px;
+      }
+      .about-links a {
+        color: #2563eb;
+        text-decoration: none;
+        font-size: 1.1rem;
+        margin-right: 6px;
+      }
+      .about-links a:hover {
+        text-decoration: underline;
+      }
+      .jobs-list {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+      }
+      .job-card {
+        background: #f7fafd;
+        border: 1.5px solid #e3eafc;
+        border-radius: 12px;
+        padding: 18px 18px 14px 18px;
+        display: flex;
+        align-items: flex-start;
+        gap: 18px;
+        justify-content: space-between;
+        flex-wrap: wrap;
+      }
+      .job-info {
+        flex: 1 1 0;
+      }
+      .job-title {
+        font-weight: 700;
+        font-size: 1.08rem;
+        color: #222;
+      }
+      .job-tags {
+        display: flex;
+        gap: 8px;
+        margin-top: 4px;
+      }
+      .job-tag {
+        font-size: 0.92rem;
+        font-weight: 600;
+        padding: 3px 10px;
+        border-radius: 8px;
+        background: #fff;
+        color: #2563eb;
+        border: 1px solid #e3eafc;
+      }
+      .job-location {
+        color: #5a6a85;
+        font-size: 0.98rem;
+        margin-top: 2px;
+      }
+      .request-btn {
+        background: #fff;
+        color: #2563eb;
+        border: 1.5px solid #2563eb;
+        border-radius: 8px;
+        font-weight: 700;
+        padding: 8px 18px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background 0.2s, color 0.2s;
+        margin-left: 12px;
+      }
+      .request-btn:hover {
+        background: #2563eb;
+        color: #fff;
+      }
+      .premium-card {
+        background: linear-gradient(135deg, #7f53e9 0%, #2563eb 100%);
+        color: #fff;
+        border-radius: 18px;
+        box-shadow: 0 4px 24px rgba(37, 99, 235, 0.13);
+        padding: 32px 24px 24px 24px;
+        text-align: center;
+        margin-top: 12px;
+      }
+      .premium-title {
+        font-size: 1.18rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+      }
+      .premium-btn {
+        background: #fff;
+        color: #7f53e9;
+        border: none;
+        border-radius: 10px;
+        font-weight: 700;
+        font-size: 1.08rem;
+        padding: 12px 32px;
+        cursor: pointer;
+        margin-top: 18px;
+        transition: background 0.2s, color 0.2s;
+      }
+      .premium-btn:hover {
+        background: #e9effd;
+        color: #2563eb;
+      }
+      @media (max-width: 1000px) {
+        .main-container {
+          flex-direction: column;
+          gap: 24px;
+          align-items: stretch;
+        }
+        .left-col,
+        .right-col {
+          max-width: 100%;
+        }
+      }
+      @media (max-width: 700px) {
+        .main-container {
+          padding: 0 2px;
+        }
+        .company-card,
+        .section,
+        .premium-card {
+          padding: 16px 8px 12px 8px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="main-container" id="companyDetail">
+      Loading company details...
+    </div>
+    <script>
+      function getQueryParam(name) {
+        const url = new URL(window.location.href);
+        return url.searchParams.get(name);
+      }
+      function socialIcon(type) {
+        if (type === "linkedin")
+          return '<svg width="18" height="18" fill="#2563eb" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-10h3v10zm-1.5-11.268c-.966 0-1.75-.784-1.75-1.75s.784-1.75 1.75-1.75 1.75.784 1.75 1.75-.784 1.75-1.75 1.75zm15.5 11.268h-3v-5.604c0-1.337-.025-3.063-1.868-3.063-1.868 0-2.154 1.459-2.154 2.968v5.699h-3v-10h2.881v1.367h.041c.401-.761 1.381-1.563 2.844-1.563 3.043 0 3.604 2.004 3.604 4.609v5.587z"/></svg>';
+        if (type === "twitter")
+          return '<svg width="18" height="18" fill="#2563eb" viewBox="0 0 24 24"><path d="M24 4.557a9.93 9.93 0 0 1-2.828.775 4.932 4.932 0 0 0 2.165-2.724c-.951.564-2.005.974-3.127 1.195a4.916 4.916 0 0 0-8.38 4.482c-4.083-.205-7.697-2.162-10.125-5.138a4.822 4.822 0 0 0-.664 2.475c0 1.708.87 3.216 2.188 4.099a4.904 4.904 0 0 1-2.229-.616c-.054 2.281 1.581 4.415 3.949 4.89a4.936 4.936 0 0 1-2.224.084c.627 1.956 2.444 3.377 4.6 3.417a9.867 9.867 0 0 1-6.102 2.104c-.396 0-.787-.023-1.175-.069a13.945 13.945 0 0 0 7.548 2.212c9.057 0 14.009-7.513 14.009-14.009 0-.213-.005-.425-.014-.636a10.012 10.012 0 0 0 2.457-2.548z"/></svg>';
+        if (type === "website")
+          return '<svg width="18" height="18" fill="#2563eb" viewBox="0 0 24 24"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm0 22c-5.514 0-10-4.486-10-10s4.486-10 10-10 10 4.486 10 10-4.486 10-10 10zm0-18c-4.411 0-8 3.589-8 8s3.589 8 8 8 8-3.589 8-8-3.589-8-8-8zm0 14c-3.309 0-6-2.691-6-6s2.691-6 6-6 6 2.691 6 6-2.691 6-6 6z"/></svg>';
+        return "";
+      }
+      async function loadCompany() {
+        const id = getQueryParam("id");
+        const container = document.getElementById("companyDetail");
+        if (!id) {
+          container.innerHTML =
+            '<div style="color:red;">No company ID provided.</div>';
+          return;
+        }
+        try {
+          const res = await fetch("/api/companies/" + id);
+          const data = await res.json();
+          if (!data.success) throw new Error(data.message || "Not found");
+          const c = data.company;
+          // Company header
+          const tags = (c.tags || [])
+            .map((tag) => `<span class="tag">${tag}</span>`)
+            .join(" ");
+          // Social links
+          let socialLinks = "";
+          if (c.social_links) {
+            for (const [type, url] of Object.entries(c.social_links)) {
+              socialLinks += `<a href="${url}" target="_blank" rel="noopener">${socialIcon(
+                type
+              )}</a>`;
+            }
+          }
+          // Jobs
+          let jobsHtml = "";
+          if (c.jobs && c.jobs.length) {
+            jobsHtml = c.jobs
+              .map(
+                (job) => `
+              <div class="job-card">
+                <div class="job-info">
+                  <div class="job-title">${job.title}</div>
+                  <div class="job-location">${job.location || ""}</div>
+                  <div class="job-tags">${(job.tags || [])
+                    .map((t) => `<span class='job-tag'>${t}</span>`)
+                    .join(" ")}</div>
+                </div>
+                <button class="request-btn" onclick="window.open('${
+                  job.url || "#"
+                }','_blank');event.stopPropagation();">Request Referral</button>
+              </div>
+            `
+              )
+              .join("");
+          } else {
+            jobsHtml =
+              '<div style="color:#b0b8c9;">No jobs listed for this company.</div>';
+          }
+          // Main layout
+          container.innerHTML = `
+            <div class="left-col">
+              <div class="company-card">
+                <div class="company-header">
+                  <img class="company-logo" src="${c.logo_url || ""}" alt="${
+            c.name
+          }" />
+                  <div style="flex:1;">
+                    <div class="company-title">Get a job referral to ${
+                      c.name
+                    }</div>
+                    <div class="company-meta">
+                      <span>${c.location || "--"}</span>
+                      <span>${c.size || ""}</span>
+                    </div>
+                    <div class="company-tags">${tags}</div>
+                  </div>
+                  <button class="refer-btn" onclick="alert('Referral flow coming soon!')">Refer me to ${
+                    c.name
+                  }</button>
+                </div>
+              </div>
+              <div class="section">
+                <div class="section-title">Description</div>
+                <div>${c.description || "No description available."}</div>
+              </div>
+              <div class="section">
+                <div class="section-title">Jobs</div>
+                <div class="jobs-list">${jobsHtml}</div>
+              </div>
+            </div>
+            <div class="right-col">
+              <div class="section">
+                <div class="section-title">About</div>
+                <div class="about-links">
+                  ${
+                    c.about_url
+                      ? `<a href="${c.about_url}" target="_blank">Careers Page</a>`
+                      : ""
+                  }
+                  ${socialLinks}
+                </div>
+                <div style="color:#5a6a85;font-size:0.98rem;">${
+                  c.name ? c.name : ""
+                }</div>
+              </div>
+              <div class="section">
+                <div class="section-title">Financials</div>
+                <div><b>Type:</b> ${c.type || "--"}</div>
+                <div><b>Annual Revenue:</b> ${c.annual_revenue || "--"}</div>
+                <div><b>Market Cap:</b> ${c.market_cap || "--"}</div>
+              </div>
+              <div class="section">
+                <div class="section-title">Referrals</div>
+                <div>${c.referral_info || "No referral info."}</div>
+                ${
+                  c.referral_bonus_url
+                    ? `<div style='margin-top:6px;'><a href='${c.referral_bonus_url}' target='_blank' style='color:#2563eb;text-decoration:underline;'>Read more about ${c.name} referral bonuses.</a></div>`
+                    : ""
+                }
+              </div>
+              <div class="premium-card">
+                <div class="premium-title">Subscribe to Refer Me premium to get referred to your dream role at ${
+                  c.name
+                }!</div>
+                <button class="premium-btn" onclick="window.location.href='subscription.html'">✨ Get Premium</button>
+              </div>
+            </div>
+          `;
+        } catch (err) {
+          container.innerHTML =
+            '<div style="color:red;">Failed to load company details.</div>';
+          console.error(err);
+        }
+      }
+      document.addEventListener("DOMContentLoaded", loadCompany);
+    </script>
+  </body>
+</html>

@@ -420,6 +420,58 @@ app.get("/api/companies", async (req, res) => {
   }
 });
 
+// API endpoint to get a single company by ID
+app.get("/api/companies/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    // Fetch company details with all new fields
+    const companyResult = await pool.query(
+      `SELECT id, name, logo_url, tags, location, size, description, about_url, social_links, type, annual_revenue, market_cap, referral_info, referral_bonus_url
+       FROM companies WHERE id = $1`,
+      [id]
+    );
+    if (companyResult.rows.length === 0) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Company not found" });
+    }
+    const company = companyResult.rows[0];
+    // Convert tags to array if needed
+    company.tags = company.tags
+      ? company.tags
+          .split(",")
+          .map((tag) => tag.trim())
+          .filter(Boolean)
+      : [];
+    // Parse social_links if present
+    if (company.social_links && typeof company.social_links === "string") {
+      try {
+        company.social_links = JSON.parse(company.social_links);
+      } catch (e) {
+        company.social_links = {};
+      }
+    }
+    // Fetch jobs for this company
+    const jobsResult = await pool.query(
+      `SELECT id, title, tags, location, url FROM jobs WHERE company_id = $1 ORDER BY id ASC`,
+      [id]
+    );
+    const jobs = jobsResult.rows.map((job) => ({
+      ...job,
+      tags: job.tags
+        ? job.tags
+            .split(",")
+            .map((t) => t.trim())
+            .filter(Boolean)
+        : [],
+    }));
+    res.json({ success: true, company: { ...company, jobs } });
+  } catch (err) {
+    console.error("Error fetching company:", err);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
 // Serve uploaded files statically
 app.use("/uploads", express.static(uploadDir));
 
