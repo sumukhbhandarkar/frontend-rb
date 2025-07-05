@@ -342,7 +342,7 @@ app.post("/api/user/account", async (req, res) => {
       `UPDATE users 
        SET first_name = $1, last_name = $2, bio = $3, title = $4, 
            experience = $5, location = $6, relocate = $7, resume_url = $8
-       WHERE id = $9 OR linkedin_id = $9`,
+       WHERE id = $9 OR linkedin_id = $9::text`,
       [
         firstName,
         lastName,
