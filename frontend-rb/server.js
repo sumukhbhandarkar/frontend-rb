@@ -287,11 +287,22 @@ app.get("/api/user/account", async (req, res) => {
 
   try {
     const userId = req.session.user.id;
-    const userRes = await pool.query(
-      `SELECT first_name, last_name, bio, title, experience, location, relocate, resume_url 
-       FROM users WHERE id = $1 OR linkedin_id = $1`,
-      [userId]
-    );
+    let userRes;
+    if (!isNaN(userId)) {
+      // Numeric ID
+      userRes = await pool.query(
+        `SELECT first_name, last_name, bio, title, experience, location, relocate, resume_url 
+         FROM users WHERE id = $1`,
+        [userId]
+      );
+    } else {
+      // LinkedIn ID (string)
+      userRes = await pool.query(
+        `SELECT first_name, last_name, bio, title, experience, location, relocate, resume_url 
+         FROM users WHERE linkedin_id = $1`,
+        [userId]
+      );
+    }
 
     if (userRes.rows.length === 0) {
       return res.json({ success: false, message: "User not found" });
@@ -338,27 +349,63 @@ app.post("/api/user/account", async (req, res) => {
       resumeUrl,
     } = req.body;
 
-    await pool.query(
-      `UPDATE users 
-       SET first_name = $1, last_name = $2, bio = $3, title = $4, 
-           experience = $5, location = $6, relocate = $7, resume_url = $8
-       WHERE id = $9 OR linkedin_id = $9::text`,
-      [
-        firstName,
-        lastName,
-        bio,
-        title,
-        experience,
-        location,
-        relocate,
-        resumeUrl,
-        userId,
-      ]
-    );
+    let updateRes;
+    if (!isNaN(userId)) {
+      // Numeric ID
+      updateRes = await pool.query(
+        `UPDATE users 
+         SET first_name = $1, last_name = $2, bio = $3, title = $4, 
+             experience = $5, location = $6, relocate = $7, resume_url = $8
+         WHERE id = $9`,
+        [
+          firstName,
+          lastName,
+          bio,
+          title,
+          experience,
+          location,
+          relocate,
+          resumeUrl,
+          userId,
+        ]
+      );
+    } else {
+      // LinkedIn ID (string)
+      updateRes = await pool.query(
+        `UPDATE users 
+         SET first_name = $1, last_name = $2, bio = $3, title = $4, 
+             experience = $5, location = $6, relocate = $7, resume_url = $8
+         WHERE linkedin_id = $9`,
+        [
+          firstName,
+          lastName,
+          bio,
+          title,
+          experience,
+          location,
+          relocate,
+          resumeUrl,
+          userId,
+        ]
+      );
+    }
 
     res.json({ success: true, message: "Account details saved successfully" });
   } catch (err) {
     console.error("Error saving user account:", err);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
+// API endpoint to get all companies
+app.get("/api/companies", async (req, res) => {
+  try {
+    const result = await pool.query(
+      "SELECT id, name, logo_url, tags FROM companies"
+    );
+    res.json({ success: true, companies: result.rows });
+  } catch (err) {
+    console.error("Error fetching companies:", err);
     res.status(500).json({ success: false, message: "Server error" });
   }
 });

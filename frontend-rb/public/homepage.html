@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Request Referrals - Refer Buddy</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        margin: 0;
+        font-family: "Montserrat", Arial, sans-serif;
+        background: #f7fafd;
+        color: #222;
+      }
+      .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 24px 48px 16px 48px;
+        background: #fff;
+        box-shadow: 0 2px 8px rgba(37, 99, 235, 0.04);
+      }
+      .logo {
+        font-size: 2rem;
+        font-weight: 700;
+        letter-spacing: -1px;
+        color: #444;
+        display: flex;
+        align-items: center;
+      }
+      .logo span {
+        color: #2563eb;
+        margin-left: 2px;
+      }
+      .nav {
+        display: flex;
+        align-items: center;
+        gap: 36px;
+      }
+      .nav-link {
+        text-decoration: none;
+        color: #444;
+        font-weight: 600;
+        font-size: 1.08rem;
+        transition: color 0.2s;
+        position: relative;
+        padding: 0 4px;
+      }
+      .nav-link:hover {
+        color: #2563eb;
+      }
+      .main-content {
+        max-width: 1200px;
+        margin: 36px auto 0 auto;
+        padding: 0 16px;
+      }
+      .hero-title {
+        font-size: 2.4rem;
+        font-weight: 800;
+        margin-bottom: 10px;
+        color: #111;
+        letter-spacing: 0.5px;
+      }
+      .hero-title .highlight {
+        color: #2563eb;
+      }
+      .hero-desc {
+        color: #5a6a85;
+        font-size: 1.15rem;
+        margin-bottom: 32px;
+      }
+      .search-row {
+        display: flex;
+        gap: 16px;
+        margin-bottom: 18px;
+        align-items: center;
+      }
+      .search-input {
+        flex: 1 1 0;
+        padding: 14px 18px;
+        border-radius: 12px;
+        border: 1.5px solid #cfd8e3;
+        font-size: 1.08rem;
+        background: #fff;
+        transition: border 0.2s, box-shadow 0.2s;
+        box-shadow: 0 2px 8px rgba(37, 99, 235, 0.04);
+      }
+      .search-input:focus {
+        border: 2px solid #2563eb;
+        outline: none;
+        box-shadow: 0 4px 16px rgba(37, 99, 235, 0.1);
+      }
+      .search-btn {
+        background: #2563eb;
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        font-weight: 700;
+        font-size: 1.08rem;
+        padding: 12px 28px;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+      .search-btn:hover {
+        background: #174ea6;
+      }
+      .filter-row {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 18px;
+      }
+      .filter-row select {
+        padding: 10px 16px;
+        border-radius: 8px;
+        border: 1.5px solid #cfd8e3;
+        font-size: 1.02rem;
+        background: #fff;
+        color: #222;
+        font-weight: 600;
+        transition: border 0.2s;
+      }
+      .companies-title {
+        font-size: 1.3rem;
+        font-weight: 700;
+        margin: 32px 0 18px 0;
+        color: #222;
+      }
+      .companies-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 22px;
+      }
+      .company-card {
+        background: #fff;
+        border-radius: 16px;
+        box-shadow: 0 2px 12px rgba(37, 99, 235, 0.07);
+        padding: 22px 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+        border: 1.5px solid #e3eafc;
+        position: relative;
+        min-height: 90px;
+      }
+      .company-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 1.18rem;
+        font-weight: 700;
+        color: #222;
+      }
+      .company-logo {
+        width: 32px;
+        height: 32px;
+        object-fit: contain;
+        border-radius: 8px;
+        background: #f7fafd;
+        border: 1px solid #e3eafc;
+        display: inline-block;
+      }
+      .company-tags {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 2px;
+      }
+      .tag {
+        font-size: 0.92rem;
+        font-weight: 600;
+        padding: 4px 10px;
+        border-radius: 8px;
+        background: #f7fafd;
+        color: #2563eb;
+        border: 1px solid #e3eafc;
+      }
+      .company-add-btn {
+        position: absolute;
+        top: 18px;
+        right: 18px;
+        background: #2563eb;
+        color: #fff;
+        border: none;
+        border-radius: 50%;
+        width: 32px;
+        height: 32px;
+        font-size: 1.3rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: background 0.2s;
+        box-shadow: 0 2px 8px rgba(37, 99, 235, 0.08);
+      }
+      .company-add-btn:hover {
+        background: #174ea6;
+      }
+      @media (max-width: 700px) {
+        .header {
+          flex-direction: column;
+          align-items: flex-start;
+          padding: 18px 12px 10px 12px;
+          gap: 12px;
+        }
+        .main-content {
+          padding: 0 4px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="header">
+      <div class="logo">Refer <span>Buddy</span></div>
+      <nav class="nav">
+        <a href="homepage.html" class="nav-link">Request Referrals</a>
+        <a href="#" class="nav-link">Referral Marketplace</a>
+        <span class="nav-link">Resume Tools &#9662;</span>
+        <span class="nav-link">Premium <span class="fire">🔥</span></span>
+        <span class="account" id="accountDropdownBtn">Account &#9662;</span>
+      </nav>
+    </header>
+    <div class="main-content">
+      <div class="hero-title">
+        Get referred to over 1000+ <span class="highlight">companies</span>
+      </div>
+      <div class="hero-desc">
+        Select a company you want a referral for, enter the URL for the job
+        posting that you want, and send your profile off to our referrers!
+      </div>
+      <div class="search-row">
+        <input
+          class="search-input"
+          type="text"
+          placeholder="Popular: Amazon, Google, KPMG, etc"
+        />
+        <button class="search-btn">Search</button>
+      </div>
+      <div class="filter-row">
+        <select>
+          <option>Sort by</option>
+          <option>Most Popular</option>
+          <option>Recently Added</option>
+        </select>
+        <select>
+          <option>Categories</option>
+          <option>Tech</option>
+          <option>Finance</option>
+          <option>Media</option>
+          <option>Gaming</option>
+          <option>Automotive</option>
+          <option>Commerce</option>
+          <option>Social Media</option>
+          <option>Entertainment</option>
+        </select>
+      </div>
+      <div class="companies-title">Companies</div>
+      <div class="companies-grid" id="companiesGrid"></div>
+      <script>
+        async function loadCompanies() {
+          const grid = document.getElementById("companiesGrid");
+          grid.innerHTML = "<div>Loading companies...</div>";
+          try {
+            const res = await fetch("/api/companies");
+            const data = await res.json();
+            if (!data.success)
+              throw new Error(data.message || "Failed to load");
+            if (!data.companies.length) {
+              grid.innerHTML = "<div>No companies found.</div>";
+              return;
+            }
+            grid.innerHTML = "";
+            data.companies.forEach((company) => {
+              const tags = (company.tags || [])
+                .map((tag) => `<span class="tag">${tag}</span>`)
+                .join(" ");
+              grid.innerHTML += `
+              <div class="company-card">
+                <div class="company-header">
+                  <img class="company-logo" src="${
+                    company.logo_url || ""
+                  }" alt="${company.name}" />
+                  ${company.name}
+                </div>
+                <div class="company-tags">${tags}</div>
+                <button class="company-add-btn">+</button>
+              </div>
+            `;
+            });
+          } catch (err) {
+            grid.innerHTML =
+              '<div style="color:red;">Failed to load companies.</div>';
+            console.error(err);
+          }
+        }
+        document.addEventListener("DOMContentLoaded", loadCompanies);
+      </script>
+    </div>
+  </body>
+</html>
