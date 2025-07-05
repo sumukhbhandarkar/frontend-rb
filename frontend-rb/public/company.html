@@ -11,9 +11,55 @@
     <style>
       body {
         font-family: "Montserrat", Arial, sans-serif;
-        background: #f7fafd;
+        background: linear-gradient(135deg, #f0f4f8 0%, #e9effd 100%);
         color: #222;
         margin: 0;
+      }
+      .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 24px 48px 16px 48px;
+        background: #fff;
+        box-shadow: 0 2px 8px rgba(37, 99, 235, 0.04);
+      }
+      .logo {
+        font-size: 2rem;
+        font-weight: 700;
+        letter-spacing: -1px;
+        color: #444;
+        display: flex;
+        align-items: center;
+      }
+      .logo span {
+        color: #2563eb;
+        margin-left: 2px;
+      }
+      .nav {
+        display: flex;
+        align-items: center;
+        gap: 36px;
+      }
+      .nav-link {
+        text-decoration: none;
+        color: #444;
+        font-weight: 600;
+        font-size: 1.08rem;
+        transition: color 0.2s;
+        position: relative;
+        padding: 0 4px;
+      }
+      .nav-link:hover {
+        color: #2563eb;
+      }
+      .account {
+        color: #444;
+        font-weight: 600;
+        font-size: 1.08rem;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        cursor: pointer;
       }
       .main-container {
         max-width: 1200px;
@@ -39,36 +85,39 @@
       }
       .company-card {
         background: #fff;
-        border-radius: 18px;
-        box-shadow: 0 4px 24px rgba(37, 99, 235, 0.07);
-        padding: 32px 32px 24px 32px;
-        margin-bottom: 24px;
+        border-radius: 24px;
+        box-shadow: 0 8px 32px rgba(37, 99, 235, 0.1);
+        padding: 40px 40px 28px 40px;
+        margin-bottom: 28px;
+        border: 2px solid #e3eafc;
       }
       .company-header {
         display: flex;
         align-items: center;
-        gap: 18px;
+        gap: 22px;
         margin-bottom: 12px;
       }
       .company-logo {
-        width: 64px;
-        height: 64px;
+        width: 72px;
+        height: 72px;
         object-fit: contain;
-        border-radius: 12px;
+        border-radius: 16px;
         background: #f7fafd;
-        border: 1px solid #e3eafc;
+        border: 2px solid #e3eafc;
+        box-shadow: 0 2px 8px rgba(37, 99, 235, 0.08);
       }
       .company-title {
-        font-size: 1.5rem;
-        font-weight: 800;
+        font-size: 1.35rem;
+        font-weight: 700;
         color: #222;
+        margin-bottom: 2px;
       }
       .company-meta {
         display: flex;
         align-items: center;
-        gap: 18px;
+        gap: 14px;
         color: #5a6a85;
-        font-size: 1.02rem;
+        font-size: 0.98rem;
         margin-bottom: 6px;
       }
       .company-tags {
@@ -78,45 +127,55 @@
         flex-wrap: wrap;
       }
       .tag {
-        font-size: 0.98rem;
-        font-weight: 600;
-        padding: 5px 14px;
+        font-size: 0.93rem;
+        font-weight: 500;
+        padding: 5px 13px;
         border-radius: 8px;
         background: #f7fafd;
         color: #2563eb;
         border: 1px solid #e3eafc;
+        transition: background 0.2s, color 0.2s;
+        cursor: pointer;
+      }
+      .tag:hover {
+        background: #2563eb;
+        color: #fff;
       }
       .refer-btn {
         background: #2563eb;
         color: #fff;
         border: none;
         border-radius: 10px;
-        font-weight: 700;
-        font-size: 1.08rem;
-        padding: 12px 32px;
+        font-weight: 600;
+        font-size: 1rem;
+        padding: 12px 28px;
         cursor: pointer;
-        transition: background 0.2s;
-        float: right;
+        transition: background 0.2s, box-shadow 0.2s;
+        box-shadow: 0 2px 8px rgba(37, 99, 235, 0.1);
+        margin-left: auto;
       }
       .refer-btn:hover {
         background: #174ea6;
+        box-shadow: 0 4px 16px rgba(37, 99, 235, 0.18);
+      }
+      .section-title {
+        font-size: 1.13rem;
+        font-weight: 700;
+        margin-bottom: 12px;
+        color: #23407c;
+        letter-spacing: 0.2px;
       }
       .section {
         background: #fff;
         border-radius: 18px;
-        box-shadow: 0 4px 24px rgba(37, 99, 235, 0.07);
+        box-shadow: 0 2px 12px rgba(37, 99, 235, 0.06);
         padding: 28px 32px 22px 32px;
-        margin-bottom: 24px;
-      }
-      .section-title {
-        font-size: 1.15rem;
-        font-weight: 700;
-        margin-bottom: 10px;
-        color: #2563eb;
+        margin-bottom: 28px;
+        border: 1.5px solid #e3eafc;
       }
       .about-links {
         display: flex;
-        gap: 10px;
+        gap: 12px;
         margin-bottom: 8px;
       }
       .about-links a {
@@ -124,25 +183,33 @@
         text-decoration: none;
         font-size: 1.1rem;
         margin-right: 6px;
+        transition: color 0.2s;
       }
       .about-links a:hover {
+        color: #174ea6;
         text-decoration: underline;
       }
       .jobs-list {
         display: flex;
         flex-direction: column;
-        gap: 18px;
+        gap: 24px;
       }
       .job-card {
-        background: #f7fafd;
+        background: #f9fbfe;
         border: 1.5px solid #e3eafc;
-        border-radius: 12px;
-        padding: 18px 18px 14px 18px;
+        border-radius: 14px;
+        padding: 18px 22px 14px 22px;
         display: flex;
         align-items: flex-start;
         gap: 18px;
         justify-content: space-between;
         flex-wrap: wrap;
+        box-shadow: 0 1px 6px rgba(37, 99, 235, 0.04);
+        transition: box-shadow 0.2s, border 0.2s;
+      }
+      .job-card:hover {
+        box-shadow: 0 4px 16px rgba(37, 99, 235, 0.1);
+        border: 1.5px solid #2563eb;
       }
       .job-info {
         flex: 1 1 0;
@@ -151,20 +218,23 @@
         font-weight: 700;
         font-size: 1.08rem;
         color: #222;
+        margin-bottom: 2px;
       }
       .job-tags {
         display: flex;
-        gap: 8px;
+        gap: 7px;
         margin-top: 4px;
       }
       .job-tag {
         font-size: 0.92rem;
         font-weight: 600;
         padding: 3px 10px;
-        border-radius: 8px;
-        background: #fff;
+        border-radius: 7px;
+        background: #f7fafd;
         color: #2563eb;
         border: 1px solid #e3eafc;
+        transition: background 0.2s, color 0.2s;
+        cursor: default;
       }
       .job-location {
         color: #5a6a85;
@@ -175,24 +245,26 @@
         background: #fff;
         color: #2563eb;
         border: 1.5px solid #2563eb;
-        border-radius: 8px;
+        border-radius: 9px;
         font-weight: 700;
-        padding: 8px 18px;
-        font-size: 1rem;
+        padding: 9px 22px;
+        font-size: 1.01rem;
         cursor: pointer;
-        transition: background 0.2s, color 0.2s;
+        transition: background 0.2s, color 0.2s, box-shadow 0.2s;
         margin-left: 12px;
+        box-shadow: 0 1px 6px rgba(37, 99, 235, 0.04);
       }
       .request-btn:hover {
         background: #2563eb;
         color: #fff;
+        box-shadow: 0 4px 16px rgba(37, 99, 235, 0.1);
       }
       .premium-card {
         background: linear-gradient(135deg, #7f53e9 0%, #2563eb 100%);
         color: #fff;
-        border-radius: 18px;
+        border-radius: 20px;
         box-shadow: 0 4px 24px rgba(37, 99, 235, 0.13);
-        padding: 32px 24px 24px 24px;
+        padding: 36px 24px 28px 24px;
         text-align: center;
         margin-top: 12px;
       }
@@ -205,13 +277,14 @@
         background: #fff;
         color: #7f53e9;
         border: none;
-        border-radius: 10px;
+        border-radius: 12px;
         font-weight: 700;
         font-size: 1.08rem;
-        padding: 12px 32px;
+        padding: 14px 38px;
         cursor: pointer;
         margin-top: 18px;
         transition: background 0.2s, color 0.2s;
+        box-shadow: 0 2px 8px rgba(37, 99, 235, 0.1);
       }
       .premium-btn:hover {
         background: #e9effd;
@@ -229,18 +302,84 @@
         }
       }
       @media (max-width: 700px) {
+        .header {
+          flex-direction: column;
+          align-items: flex-start;
+          padding: 18px 12px 10px 12px;
+          gap: 12px;
+        }
         .main-container {
           padding: 0 2px;
         }
         .company-card,
         .section,
         .premium-card {
-          padding: 16px 8px 12px 8px;
+          padding: 18px 8px 14px 8px;
         }
       }
     </style>
   </head>
   <body>
+    <header class="header">
+      <div class="logo">Refer <span>Buddy</span></div>
+      <nav class="nav">
+        <a href="homepage.html" class="nav-link">Request Referrals</a>
+        <a href="#" class="nav-link">Referral Marketplace</a>
+        <span class="nav-link">Resume Tools &#9662;</span>
+        <span class="nav-link">Premium <span class="fire">🔥</span></span>
+        <span class="account" id="accountDropdownBtn">Account &#9662;</span>
+      </nav>
+    </header>
+    <div
+      id="accountDropdown"
+      style="
+        display: none;
+        position: absolute;
+        right: 48px;
+        top: 70px;
+        background: #fff;
+        box-shadow: 0 2px 8px rgba(37, 99, 235, 0.08);
+        border-radius: 10px;
+        min-width: 160px;
+        z-index: 1000;
+      "
+    >
+      <a
+        href="subscription.html"
+        style="
+          display: block;
+          padding: 12px 20px;
+          color: #2563eb;
+          text-decoration: none;
+          font-weight: 600;
+          border-bottom: 1px solid #f0f4f8;
+        "
+        >Referrals Dashboard</a
+      >
+      <a
+        href="account.html"
+        style="
+          display: block;
+          padding: 12px 20px;
+          color: #2563eb;
+          text-decoration: none;
+          font-weight: 600;
+          border-bottom: 1px solid #f0f4f8;
+        "
+        >Account Settings</a
+      >
+      <a
+        href="/logout"
+        style="
+          display: block;
+          padding: 12px 20px;
+          color: #e63946;
+          text-decoration: none;
+          font-weight: 600;
+        "
+        >Logout</a
+      >
+    </div>
     <div class="main-container" id="companyDetail">
       Loading company details...
     </div>
@@ -327,7 +466,7 @@
                     </div>
                     <div class="company-tags">${tags}</div>
                   </div>
-                  <button class="refer-btn" onclick="alert('Referral flow coming soon!')">Refer me to ${
+                  <button class="refer-btn" onclick="alert('Referral flow coming soon!')">Refer Me to ${
                     c.name
                   }</button>
                 </div>
@@ -350,11 +489,10 @@
                       ? `<a href="${c.about_url}" target="_blank">Careers Page</a>`
                       : ""
                   }
+                </div>
+                <div class="about-links">
                   ${socialLinks}
                 </div>
-                <div style="color:#5a6a85;font-size:0.98rem;">${
-                  c.name ? c.name : ""
-                }</div>
               </div>
               <div class="section">
                 <div class="section-title">Financials</div>
@@ -372,7 +510,7 @@
                 }
               </div>
               <div class="premium-card">
-                <div class="premium-title">Subscribe to Refer Me premium to get referred to your dream role at ${
+                <div class="premium-title">Subscribe to Refer Buddy premium to get referred to your dream role at ${
                   c.name
                 }!</div>
                 <button class="premium-btn" onclick="window.location.href='subscription.html'">✨ Get Premium</button>
@@ -386,6 +524,17 @@
         }
       }
       document.addEventListener("DOMContentLoaded", loadCompany);
+      // Account dropdown logic
+      const accountBtn = document.getElementById("accountDropdownBtn");
+      const dropdown = document.getElementById("accountDropdown");
+      document.addEventListener("click", function (e) {
+        if (accountBtn && accountBtn.contains(e.target)) {
+          dropdown.style.display =
+            dropdown.style.display === "block" ? "none" : "block";
+        } else if (dropdown && !dropdown.contains(e.target)) {
+          dropdown.style.display = "none";
+        }
+      });
     </script>
   </body>
 </html>

@@ -241,21 +241,8 @@
         <button class="search-btn">Search</button>
       </div>
       <div class="filter-row">
-        <select>
-          <option>Sort by</option>
-          <option>Most Popular</option>
-          <option>Recently Added</option>
-        </select>
-        <select>
-          <option>Categories</option>
-          <option>Tech</option>
-          <option>Finance</option>
-          <option>Media</option>
-          <option>Gaming</option>
-          <option>Automotive</option>
-          <option>Commerce</option>
-          <option>Social Media</option>
-          <option>Entertainment</option>
+        <select id="categoryDropdown">
+          <option value="">All Categories</option>
         </select>
       </div>
       <div class="companies-title">Companies</div>
@@ -311,6 +298,8 @@
         >
       </div>
       <script>
+        let allCompanies = [];
+        let allTags = [];
         async function loadCompanies() {
           const grid = document.getElementById("companiesGrid");
           grid.innerHTML = "<div>Loading companies...</div>";
@@ -323,12 +312,41 @@
               grid.innerHTML = "<div>No companies found.</div>";
               return;
             }
-            grid.innerHTML = "";
-            data.companies.forEach((company) => {
-              const tags = (company.tags || [])
-                .map((tag) => `<span class="tag">${tag}</span>`)
-                .join(" ");
-              grid.innerHTML += `
+            allCompanies = data.companies;
+            // Collect unique tags
+            const tagSet = new Set();
+            allCompanies.forEach((c) =>
+              (c.tags || []).forEach((tag) => tagSet.add(tag))
+            );
+            allTags = Array.from(tagSet).sort();
+            populateCategoriesDropdown();
+            renderCompanies(allCompanies);
+          } catch (err) {
+            grid.innerHTML =
+              '<div style="color:red;">Failed to load companies.</div>';
+            console.error(err);
+          }
+        }
+        function populateCategoriesDropdown() {
+          const dropdown = document.getElementById("categoryDropdown");
+          dropdown.innerHTML =
+            '<option value="">All Categories</option>' +
+            allTags
+              .map((tag) => `<option value="${tag}">${tag}</option>`)
+              .join("");
+        }
+        function renderCompanies(companies) {
+          const grid = document.getElementById("companiesGrid");
+          if (!companies.length) {
+            grid.innerHTML = "<div>No companies found.</div>";
+            return;
+          }
+          grid.innerHTML = "";
+          companies.forEach((company) => {
+            const tags = (company.tags || [])
+              .map((tag) => `<span class="tag">${tag}</span>`)
+              .join(" ");
+            grid.innerHTML += `
               <div class="company-card" style="cursor:pointer;" onclick="window.location.href='company.html?id=${
                 company.id
               }'">
@@ -342,15 +360,53 @@
                 <button class="company-add-btn">+</button>
               </div>
             `;
+          });
+        }
+        function filterCompanies() {
+          const searchInput = document.querySelector(".search-input");
+          const query = searchInput.value.trim().toLowerCase();
+          const category = document.getElementById("categoryDropdown").value;
+          let filtered = allCompanies;
+          if (query) {
+            filtered = filtered.filter((company) => {
+              const nameMatch = company.name.toLowerCase().includes(query);
+              const tagMatch = (company.tags || []).some((tag) =>
+                tag.toLowerCase().includes(query)
+              );
+              return nameMatch || tagMatch;
             });
-          } catch (err) {
-            grid.innerHTML =
-              '<div style="color:red;">Failed to load companies.</div>';
-            console.error(err);
           }
+          if (category) {
+            filtered = filtered.filter((company) =>
+              (company.tags || []).includes(category)
+            );
+          }
+          renderCompanies(filtered);
         }
         document.addEventListener("DOMContentLoaded", loadCompanies);
-
+        // Search button click
+        document
+          .querySelector(".search-btn")
+          .addEventListener("click", filterCompanies);
+        // Enter key in search input
+        document
+          .querySelector(".search-input")
+          .addEventListener("keydown", function (e) {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              filterCompanies();
+            }
+          });
+        // Category dropdown change
+        document
+          .getElementById("categoryDropdown")
+          .addEventListener("change", filterCompanies);
+        // Optional: live filtering as user types
+        document
+          .querySelector(".search-input")
+          .addEventListener("input", function () {
+            if (!this.value) filterCompanies();
+          });
         // Account dropdown logic
         const accountBtn = document.getElementById("accountDropdownBtn");
         const dropdown = document.getElementById("accountDropdown");
