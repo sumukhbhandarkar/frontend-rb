@@ -173,7 +173,7 @@
       .settings-form label {
         font-weight: 600;
         color: #2563eb;
-        margin-bottom: 4px;
+        margin-bottom: 8px;
         font-size: 1rem;
       }
       .settings-form .small {
@@ -500,9 +500,59 @@
         <a href="#" class="nav-link">Referral Marketplace</a>
         <span class="nav-link">Resume Tools &#9662;</span>
         <span class="nav-link">Premium <span class="fire">🔥</span></span>
-        <span class="account">Account &#9662;</span>
+        <span class="account" id="accountDropdownBtn">Account &#9662;</span>
       </nav>
     </header>
+    <div
+      id="accountDropdown"
+      style="
+        display: none;
+        position: absolute;
+        right: 48px;
+        top: 70px;
+        background: #fff;
+        box-shadow: 0 2px 8px rgba(37, 99, 235, 0.08);
+        border-radius: 10px;
+        min-width: 160px;
+        z-index: 1000;
+      "
+    >
+      <a
+        href="subscription.html"
+        style="
+          display: block;
+          padding: 12px 20px;
+          color: #2563eb;
+          text-decoration: none;
+          font-weight: 600;
+          border-bottom: 1px solid #f0f4f8;
+        "
+        >Referrals Dashboard</a
+      >
+      <a
+        href="account.html"
+        style="
+          display: block;
+          padding: 12px 20px;
+          color: #2563eb;
+          text-decoration: none;
+          font-weight: 600;
+          border-bottom: 1px solid #f0f4f8;
+        "
+        >Account Settings</a
+      >
+      <a
+        href="/logout"
+        style="
+          display: block;
+          padding: 12px 20px;
+          color: #e63946;
+          text-decoration: none;
+          font-weight: 600;
+        "
+        >Logout</a
+      >
+    </div>
     <div class="banner">
       Your mobile number is not verified. Please verify to enable all features.
       <button>Verify mobile</button>
@@ -556,13 +606,12 @@
             </div>
           </div>
           <div>
-            <label for="title">Professional title *</label>
+            <label for="title">Professional title</label>
             <input
               type="text"
               id="title"
               name="title"
               placeholder="Ex: Software Engineer | Student @ IIT | HR Professional | SDET at Juniper"
-              required
             />
           </div>
           <div class="settings-form-row">
@@ -598,7 +647,7 @@
             <label for="relocate">Open to relocation?</label>
           </div>
           <div class="resume-row" id="resumeRow">
-            <label for="resume">Resume *</label>
+            <label for="resume">Resume</label>
             <div class="resume-upload-box" id="resumeUploadSection">
               <label class="resume-file-label" for="resumeFile"
                 >Choose File</label
@@ -670,7 +719,10 @@
         <div class="subscription-info">
           Our Refer Buddy Premium subscription includes unlimited referrals,
           resume feedback and much more. Learn more about it
-          <a href="#" style="color: #2563eb; text-decoration: underline">here</a
+          <a
+            href="subscription.html"
+            style="color: #2563eb; text-decoration: underline"
+            >here</a
           >!
         </div>
         <button class="subscription-btn">✨ Get Premium</button>
@@ -682,6 +734,88 @@
       const bioCount = document.getElementById("bioCount");
       bio.addEventListener("input", function () {
         bioCount.textContent = `(${bio.value.length}/1028)`;
+      });
+
+      // Load existing user data
+      async function loadUserData() {
+        try {
+          const response = await fetch("/api/user/account");
+          const result = await response.json();
+
+          if (result.success && result.data) {
+            const data = result.data;
+
+            // Populate form fields
+            document.getElementById("firstName").value = data.firstName || "";
+            document.getElementById("lastName").value = data.lastName || "";
+            document.getElementById("bio").value = data.bio || "";
+            document.getElementById("title").value = data.title || "";
+            document.getElementById("experience").value = data.experience || "";
+            document.getElementById("location").value = data.location || "";
+            document.getElementById("relocate").checked =
+              data.relocate || false;
+
+            // Update bio count
+            bioCount.textContent = `(${data.bio.length}/1028)`;
+
+            // Show existing resume if available
+            if (data.resumeUrl) {
+              showResume({
+                name: data.resumeUrl.split("/").pop(),
+                url: data.resumeUrl,
+              });
+            }
+          }
+        } catch (error) {
+          console.error("Error loading user data:", error);
+        }
+      }
+
+      // Handle form submission
+      const form = document.querySelector(".settings-form");
+      form.addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        const saveBtn = document.querySelector(".save-btn");
+        const originalText = saveBtn.textContent;
+        saveBtn.textContent = "Saving...";
+        saveBtn.disabled = true;
+
+        try {
+          const formData = {
+            firstName: document.getElementById("firstName").value,
+            lastName: document.getElementById("lastName").value,
+            bio: document.getElementById("bio").value,
+            title: document.getElementById("title").value,
+            experience:
+              parseInt(document.getElementById("experience").value) || 0,
+            location: document.getElementById("location").value,
+            relocate: document.getElementById("relocate").checked,
+            resumeUrl: uploadedResume ? uploadedResume.url : "",
+          };
+
+          const response = await fetch("/api/user/account", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData),
+          });
+
+          const result = await response.json();
+
+          if (result.success) {
+            alert("Account details saved successfully!");
+          } else {
+            alert(result.message || "Failed to save account details");
+          }
+        } catch (error) {
+          console.error("Error saving account:", error);
+          alert("Failed to save account details");
+        } finally {
+          saveBtn.textContent = originalText;
+          saveBtn.disabled = false;
+        }
       });
 
       // Resume upload logic
@@ -703,10 +837,11 @@
           : "No file chosen";
       });
 
-      // Simulate: If you want to show an uploaded resume by default, set this variable
-      let uploadedResume = null; // e.g. { name: 'resume.pdf', url: '/uploads/resume.pdf' }
+      // Global variable to track uploaded resume
+      let uploadedResume = null;
 
       function showResume(resume) {
+        uploadedResume = resume;
         resumeUploadSection.style.display = "none";
         resumeDisplaySection.style.display = "flex";
         let displayName = resume.name;
@@ -718,16 +853,20 @@
         resumeLink.title = resume.name;
       }
 
-      if (uploadedResume) {
-        showResume(uploadedResume);
-      }
-
       uploadBtn.addEventListener("click", function () {
         const file = fileInput.files[0];
         if (!file) {
           alert("Please select a file to upload.");
           return;
         }
+
+        // Check file size (1MB = 1024 * 1024 bytes)
+        const maxSize = 1 * 1024 * 1024; // 1MB in bytes
+        if (file.size > maxSize) {
+          alert("File size too large. Please upload a file smaller than 1MB.");
+          return;
+        }
+
         const formData = new FormData();
         formData.append("resume", file);
         uploadBtn.disabled = true;
@@ -746,10 +885,11 @@
               alert(data.message || "Failed to upload resume.");
             }
           })
-          .catch(() => {
+          .catch((error) => {
             uploadBtn.disabled = false;
             uploadBtn.textContent = "Upload Resume";
-            alert("Failed to upload resume.");
+            console.error("Upload error:", error);
+            alert("Failed to upload resume. Please try again.");
           });
       });
 
@@ -759,6 +899,22 @@
         resumeUploadSection.style.display = "flex";
         fileInput.value = "";
         fileNameSpan.textContent = "No file chosen";
+        uploadedResume = null;
+      });
+
+      // Load user data when page loads
+      document.addEventListener("DOMContentLoaded", loadUserData);
+
+      // Account dropdown logic
+      const accountBtn = document.getElementById("accountDropdownBtn");
+      const dropdown = document.getElementById("accountDropdown");
+      document.addEventListener("click", function (e) {
+        if (accountBtn.contains(e.target)) {
+          dropdown.style.display =
+            dropdown.style.display === "block" ? "none" : "block";
+        } else if (!dropdown.contains(e.target)) {
+          dropdown.style.display = "none";
+        }
       });
     </script>
   </body>

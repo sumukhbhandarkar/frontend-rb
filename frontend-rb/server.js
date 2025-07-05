@@ -46,6 +46,7 @@ app.use(
 );
 
 app.use(express.json()); // for parsing JSON bodies
+app.use(express.urlencoded({ extended: true })); // for parsing form data
 
 // Serve all static files except dashboard.html
 app.use((req, res, next) => {
@@ -84,7 +85,7 @@ const upload = multer({
       cb(new Error("Only PDF, DOC, and DOCX files are allowed."));
     }
   },
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
+  limits: { fileSize: 1 * 1024 * 1024 }, // 1MB limit
 });
 
 app.get("/auth/linkedin", (req, res) => {
@@ -154,25 +155,18 @@ app.get("/auth/linkedin/callback", async (req, res) => {
   }
 });
 
-// Protect dashboard.html
-app.get("/dashboard.html", (req, res) => {
+// Protect subscription.html
+app.get("/subscription.html", (req, res) => {
   if (!req.session.user) {
     return res.redirect("/signup.html");
   }
-  res.sendFile(path.join(__dirname, "public", "dashboard.html"));
+  res.sendFile(path.join(__dirname, "public", "subscription.html"));
 });
 
-// Logout route
-app.get("/logout", (req, res) => {
-  req.session.destroy(() => {
-    res.redirect("/");
-  });
-});
-
-// Redirect logged-in users to dashboard on / or /index.html
+// Redirect logged-in users to subscription.html on / or /index.html
 app.get(["/", "/index.html"], (req, res) => {
   if (req.session.user) {
-    return res.redirect("/dashboard.html");
+    return res.redirect("/subscription.html");
   }
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
@@ -246,13 +240,127 @@ app.post("/auth/email/verify-otp", async (req, res) => {
   }
 });
 
-app.post("/upload-resume", upload.single("resume"), (req, res) => {
+app.post("/upload-resume", upload.single("resume"), async (req, res) => {
   if (!req.file) {
     return res.json({ success: false, message: "No file uploaded." });
   }
-  // Optionally, you can save the file info to the user in the DB here
-  const fileUrl = "/uploads/" + req.file.filename;
-  res.json({ success: true, name: req.file.originalname, url: fileUrl });
+
+  try {
+    const fileUrl = "/uploads/" + req.file.filename;
+
+    // Save the resume URL to the user's account if they're logged in
+    if (req.session.user) {
+      const userId = req.session.user.id;
+      await pool.query(
+        "UPDATE users SET resume_url = $1 WHERE id = $2 OR linkedin_id = $2",
+        [fileUrl, userId]
+      );
+    }
+
+    res.json({ success: true, name: req.file.originalname, url: fileUrl });
+  } catch (err) {
+    console.error("Error saving resume URL:", err);
+    res.json({ success: false, message: "Failed to save resume URL." });
+  }
+});
+
+// Error handling middleware for multer file size limit
+app.use((error, req, res, next) => {
+  if (error instanceof multer.MulterError) {
+    if (error.code === "LIMIT_FILE_SIZE") {
+      return res.json({
+        success: false,
+        message: "File size too large. Please upload a file smaller than 1MB.",
+      });
+    }
+  }
+  next(error);
+});
+
+// Get user account details
+app.get("/api/user/account", async (req, res) => {
+  if (!req.session.user) {
+    return res
+      .status(401)
+      .json({ success: false, message: "Not authenticated" });
+  }
+
+  try {
+    const userId = req.session.user.id;
+    const userRes = await pool.query(
+      `SELECT first_name, last_name, bio, title, experience, location, relocate, resume_url 
+       FROM users WHERE id = $1 OR linkedin_id = $1`,
+      [userId]
+    );
+
+    if (userRes.rows.length === 0) {
+      return res.json({ success: false, message: "User not found" });
+    }
+
+    const user = userRes.rows[0];
+    res.json({
+      success: true,
+      data: {
+        firstName: user.first_name || "",
+        lastName: user.last_name || "",
+        bio: user.bio || "",
+        title: user.title || "",
+        experience: user.experience || 0,
+        location: user.location || "",
+        relocate: user.relocate || false,
+        resumeUrl: user.resume_url || "",
+      },
+    });
+  } catch (err) {
+    console.error("Error fetching user account:", err);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
+// Save user account details
+app.post("/api/user/account", async (req, res) => {
+  if (!req.session.user) {
+    return res
+      .status(401)
+      .json({ success: false, message: "Not authenticated" });
+  }
+
+  try {
+    const userId = req.session.user.id;
+    const {
+      firstName,
+      lastName,
+      bio,
+      title,
+      experience,
+      location,
+      relocate,
+      resumeUrl,
+    } = req.body;
+
+    await pool.query(
+      `UPDATE users 
+       SET first_name = $1, last_name = $2, bio = $3, title = $4, 
+           experience = $5, location = $6, relocate = $7, resume_url = $8
+       WHERE id = $9 OR linkedin_id = $9`,
+      [
+        firstName,
+        lastName,
+        bio,
+        title,
+        experience,
+        location,
+        relocate,
+        resumeUrl,
+        userId,
+      ]
+    );
+
+    res.json({ success: true, message: "Account details saved successfully" });
+  } catch (err) {
+    console.error("Error saving user account:", err);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
 });
 
 // Serve uploaded files statically

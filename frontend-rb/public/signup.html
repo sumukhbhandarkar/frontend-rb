@@ -213,6 +213,34 @@
           padding: 32px 8px;
         }
       }
+      #otpSection {
+        display: none;
+        margin-top: 18px;
+        padding: 18px 16px;
+        background: #f7fafd;
+        border: 2px solid #2563eb;
+        border-radius: 14px;
+        box-shadow: 0 2px 12px rgba(37, 99, 235, 0.07);
+        animation: fadeIn 0.4s;
+        box-sizing: border-box;
+        width: 100%;
+        max-width: 100%;
+      }
+      #otpSection input[type="text"] {
+        font-size: 1.4rem;
+        letter-spacing: 0.3em;
+        text-align: center;
+        padding: 14px;
+        border-radius: 8px;
+        border: 1.5px solid #b6d0fa;
+        background: #fff;
+        margin-top: 0;
+        margin-bottom: 8px;
+        width: 100%;
+        font-weight: 600;
+        box-sizing: border-box;
+        display: block;
+      }
     </style>
   </head>
   <body class="signup">
@@ -247,13 +275,6 @@
             />
             Sign up with LinkedIn
           </a>
-          <button class="social-btn google">
-            <img
-              src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg"
-              alt="Google"
-            />
-            Sign up with Google
-          </button>
           <div class="divider">or</div>
           <label for="email">Email <span style="color: #e63946">*</span></label>
           <input
@@ -263,15 +284,204 @@
             placeholder="Enter your email address"
             required
           />
+          <div
+            id="otpSection"
+            style="
+              display: none;
+              margin-top: 18px;
+              padding: 18px 16px;
+              background: #f7fafd;
+              border: 2px solid #2563eb;
+              border-radius: 14px;
+              box-shadow: 0 2px 12px rgba(37, 99, 235, 0.07);
+              animation: fadeIn 0.4s;
+            "
+          >
+            <label
+              for="otp"
+              style="font-size: 1.08rem; color: #2563eb; font-weight: 700"
+              >Enter OTP <span style="color: #e63946">*</span></label
+            >
+            <input
+              type="text"
+              id="otp"
+              name="otp"
+              placeholder="Enter the 6-digit code"
+              maxlength="6"
+              pattern="[0-9]{6}"
+              style="
+                font-size: 1.4rem;
+                letter-spacing: 0.3em;
+                text-align: center;
+                padding: 14px;
+                border-radius: 8px;
+                border: 1.5px solid #b6d0fa;
+                background: #fff;
+                margin-top: 8px;
+                margin-bottom: 8px;
+                width: 100%;
+                font-weight: 600;
+              "
+              disabled
+            />
+            <div
+              id="otpMessage"
+              style="color: #5a6a85; font-size: 0.98rem; margin-top: 4px"
+            >
+              A code was sent to your email address.
+            </div>
+            <div
+              id="otpSpinner"
+              style="display: none; margin-top: 8px; text-align: center"
+            >
+              <span class="spinner"></span> Sending OTP...
+            </div>
+            <div id="resendRow" style="margin-top: 10px">
+              <a
+                href="#"
+                id="resendOtpLink"
+                style="
+                  color: #2563eb;
+                  text-decoration: underline;
+                  font-weight: 600;
+                  display: none;
+                  cursor: pointer;
+                "
+                >Resend OTP</a
+              >
+              <span
+                id="resendCountdown"
+                style="color: #b0b8c9; font-size: 0.98rem; margin-left: 8px"
+              ></span>
+            </div>
+          </div>
           <div class="terms">
             By signing up, you agree to our
             <a href="#">terms and conditions</a> and
             <a href="#">privacy policy</a>.
           </div>
-          <button class="create-btn">Create your Refer Buddy account</button>
+          <button class="create-btn" id="sendOtpBtn" type="button">
+            Create your Refer Buddy account
+          </button>
+          <button
+            class="create-btn"
+            id="verifyOtpBtn"
+            type="button"
+            style="display: none"
+            disabled
+          >
+            Verify & Sign Up
+          </button>
           <div class="login-link">
-            Already have an account? <a href="#">Log in</a>
+            Already have an account? <a href="signin.html">Log in</a>
           </div>
+          <script>
+            const sendOtpBtn = document.getElementById("sendOtpBtn");
+            const verifyOtpBtn = document.getElementById("verifyOtpBtn");
+            const emailInput = document.getElementById("email");
+            const otpSection = document.getElementById("otpSection");
+            const otpInput = document.getElementById("otp");
+            const otpSpinner = document.getElementById("otpSpinner");
+            const otpMessage = document.getElementById("otpMessage");
+            const resendOtpLink = document.getElementById("resendOtpLink");
+            const resendCountdown = document.getElementById("resendCountdown");
+            let emailValue = "";
+            let resendTimer = null;
+            function startResendTimer() {
+              let seconds = 30;
+              resendOtpLink.style.display = "none";
+              resendCountdown.textContent = `Resend available in ${seconds}s`;
+              resendCountdown.style.display = "inline";
+              resendTimer = setInterval(() => {
+                seconds--;
+                if (seconds > 0) {
+                  resendCountdown.textContent = `Resend available in ${seconds}s`;
+                } else {
+                  clearInterval(resendTimer);
+                  resendCountdown.textContent = "";
+                  resendOtpLink.style.display = "inline";
+                }
+              }, 1000);
+            }
+            sendOtpBtn.addEventListener("click", function () {
+              emailValue = emailInput.value;
+              if (!emailValue) {
+                alert("Please enter your email address.");
+                return;
+              }
+              otpSection.style.display = "block";
+              otpSpinner.style.display = "block";
+              otpInput.disabled = true;
+              verifyOtpBtn.disabled = true;
+              sendOtpBtn.style.display = "none";
+              startResendTimer();
+              fetch("/auth/email/send-otp", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email: emailValue }),
+              })
+                .then((res) => res.json())
+                .then((data) => {
+                  otpSpinner.style.display = "none";
+                  if (data.success) {
+                    otpInput.disabled = false;
+                    verifyOtpBtn.disabled = false;
+                    verifyOtpBtn.style.display = "block";
+                    otpMessage.textContent =
+                      "A code was sent to your email address.";
+                  } else {
+                    otpSection.style.display = "none";
+                    sendOtpBtn.style.display = "block";
+                    alert(data.message || "Failed to send OTP.");
+                  }
+                });
+            });
+            verifyOtpBtn.addEventListener("click", function () {
+              const otpValue = otpInput.value;
+              if (!otpValue) {
+                alert("Please enter the OTP sent to your email.");
+                return;
+              }
+              fetch("/auth/email/verify-otp", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email: emailValue, otp: otpValue }),
+              })
+                .then((res) => res.json())
+                .then((data) => {
+                  if (data.success) {
+                    window.location.href = "/account.html";
+                  } else {
+                    alert(data.message || "Invalid OTP.");
+                  }
+                });
+            });
+            resendOtpLink.addEventListener("click", function (e) {
+              e.preventDefault();
+              resendOtpLink.style.display = "none";
+              otpSpinner.style.display = "block";
+              otpInput.disabled = true;
+              verifyOtpBtn.disabled = true;
+              startResendTimer();
+              fetch("/auth/email/send-otp", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email: emailValue }),
+              })
+                .then((res) => res.json())
+                .then((data) => {
+                  otpSpinner.style.display = "none";
+                  if (data.success) {
+                    otpInput.disabled = false;
+                    verifyOtpBtn.disabled = false;
+                    otpMessage.textContent =
+                      "A new code was sent to your email address.";
+                  } else {
+                    otpMessage.textContent = "Failed to resend OTP.";
+                  }
+                });
+            });
+          </script>
         </div>
       </div>
       <div class="signup-right">
