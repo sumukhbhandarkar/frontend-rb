@@ -403,7 +403,17 @@ app.get("/api/companies", async (req, res) => {
     const result = await pool.query(
       "SELECT id, name, logo_url, tags FROM companies"
     );
-    res.json({ success: true, companies: result.rows });
+    // Convert tags from comma-separated string to array
+    const companies = result.rows.map((company) => ({
+      ...company,
+      tags: company.tags
+        ? company.tags
+            .split(",")
+            .map((tag) => tag.trim())
+            .filter(Boolean)
+        : [],
+    }));
+    res.json({ success: true, companies });
   } catch (err) {
     console.error("Error fetching companies:", err);
     res.status(500).json({ success: false, message: "Server error" });
